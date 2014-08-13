@@ -1,9 +1,8 @@
-require 'delegate'
 require 'logstash-logger'
 
 Dir[File.expand_path('logstash_override/*.rb', File.dirname(__FILE__))].each {|f| require f }
 
-class SMLogger
+class Logasm
   def initialize(loggers, service_name)
     @loggers = []
     @service_name = service_name

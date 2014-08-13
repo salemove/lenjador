@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'sm-logger'
+require 'logasm'
 require 'logstash-logger/formatter'
 
 module LogStashLogger
@@ -37,7 +37,7 @@ module LogStashLogger
     it 'adds unparsed message if there is json' do
       json = get_event_json 'hi {"not_message":"test_message","leet":1337} lol'
 
-      expect(json['unparsed']).to eq('hi {"not_message":"test_message","leet":1337} lol')
+      expect(json['unparsed']).to eq('hi {*parsed*} lol')
     end
 
     def get_event_json(message)
