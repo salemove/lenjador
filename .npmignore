@@ -1,0 +1,8 @@
+.git*
+.rspec
+.ruby*
+Gemfile*
+*.gemspec
+spec/
+*.rb
+Rakefile
