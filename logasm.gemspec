@@ -20,4 +20,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
 
   spec.add_dependency "bunny", "~> 1.3"
+  spec.add_dependency "logstash-logger", "~> 0.6.0"
 end
