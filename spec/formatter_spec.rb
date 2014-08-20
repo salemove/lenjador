@@ -18,7 +18,7 @@ module LogStashLogger
       expect(json['message']).to eq('test_message')
     end
 
-    it 'can parse json' do
+    it 'parses json' do
       json = get_event_json '{"not_message":"test_message","leet":1337}'
 
       expect(json['message']).to eq(nil)
@@ -26,7 +26,7 @@ module LogStashLogger
       expect(json['leet']).to eq(1337)
     end
 
-    it 'can parse json from text' do
+    it 'parses json from text' do
       json = get_event_json 'hi {"not_message":"test_message","leet":1337} lol'
 
       expect(json['message']).to eq(nil)

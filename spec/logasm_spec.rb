@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'logasm'
 
 describe Logasm do
-  it 'can create file logger' do
+  it 'creates file logger' do
     logasm = Logasm.new({:file=>nil},'test_service')
     number_of_loggers = logasm.loggers.count
 
@@ -14,7 +14,7 @@ describe Logasm do
     expect(logdev.instance_variable_get(:@dev)).to be_a IO
   end
 
-  it 'can create logstash logger' do
+  it 'creates logstash logger' do
     logasm = Logasm.new({:logstash=>{:host=>"localhost", :port=>5228}},'test_service')
     number_of_loggers = logasm.loggers.count
 
@@ -26,7 +26,7 @@ describe Logasm do
     expect(logdev.instance_variable_get(:@dev)).to be_a LogStashLogger::Device::UDP
   end
 
-  it 'can create multiple loggers' do
+  it 'creates multiple loggers' do
     logasm = Logasm.new({:file=>nil, :logstash=>{:host=>"localhost", :port=>5228}},'test_service')
     number_of_loggers = logasm.loggers.count
 
