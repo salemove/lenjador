@@ -11,10 +11,15 @@ module.exports = (loggers, service_name) ->
 
 add_logger = (type, args, service_name, logasm, winston) ->
   if type is 'file'
+    if typeof args.timestamp is 'undefined'
+      timestamp = logasm.timestamp
+    else
+      timestamp = args.timestamp
+
     options =
       level: args.level or 'info'
       colorize: args.colorize or true
-      timestamp: logasm.timestamp
+      timestamp: timestamp
 
     logasm.add winston.transports.Console, options
 
