@@ -7,6 +7,8 @@ Following software should be installed  & running in your system:
 1. Elasticsearch
 2. Logstash
 
+[Setup Elasticsearch, Logstash and Kibana](https://github.com/salemove/logasm/blob/master/doc/setup_elasticsearch_logstash_kibana.md)
+
 ## Usage
 
 ### Creating a new Logasm logger in Ruby
