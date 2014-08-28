@@ -20,7 +20,13 @@ module LogStashLogger
 
       if data.is_a?(String) && data.start_with?('{')
         data = (JSON.parse(data) rescue nil) || data
-        data['message'] = message.sub(/(\{.*\})/, ":")
+        data['message'] = if message.start_with?('{')
+                            message.sub(/(\{.*\})/, "*parsed*")
+                          elsif message.end_with?('}')
+                            message.sub(/(\{.*\})/, ":")
+                          else
+                            message.sub(/(\{.*\})/, "*parsed*")
+                          end
       end
 
       event = case data

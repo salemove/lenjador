@@ -21,7 +21,7 @@ module LogStashLogger
     it 'parses json' do
       json = get_event_json '{"not_message":"test_message","leet":1337}'
 
-      expect(json['message']).to eq(nil)
+      expect(json['message']).to eq("*parsed*")
       expect(json['not_message']).to eq('test_message')
       expect(json['leet']).to eq(1337)
     end
@@ -29,15 +29,9 @@ module LogStashLogger
     it 'parses json from text' do
       json = get_event_json 'hi {"not_message":"test_message","leet":1337} lol'
 
-      expect(json['message']).to eq(nil)
+      expect(json['message']).to eq('hi *parsed* lol')
       expect(json['not_message']).to eq('test_message')
       expect(json['leet']).to eq(1337)
-    end
-
-    it 'adds unparsed message if there is json' do
-      json = get_event_json 'hi {"not_message":"test_message","leet":1337} lol'
-
-      expect(json['unparsed']).to eq('hi {*parsed*} lol')
     end
 
     def get_event_json(message)

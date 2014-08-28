@@ -36,7 +36,7 @@ add_logger = (type, args, service_name, logasm, winston) ->
     logasm.add LogasmLogstashUDP, options
 
   else if type is 'loggly'
-    console.log 'Loggly is currently not implemented'
+    # Not implemented
     require 'winston-loggly'
 
     options =

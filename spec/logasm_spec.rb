@@ -3,7 +3,7 @@ require 'logasm'
 
 describe Logasm do
   it 'creates file logger' do
-    logasm = Logasm.new({:file=>nil},'test_service')
+    logasm = Logasm.new({file: nil},'test_service')
     number_of_loggers = logasm.loggers.count
 
     expect(number_of_loggers).to eq(1)
