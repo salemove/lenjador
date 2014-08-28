@@ -21,6 +21,28 @@ Logasm.new(logger_config, application_name)
 
 <b>application_name</b> is the name of the application and it will be appended to the json message.
 
+#### Configuration
+
+```
+loggers:
+  file:
+    level: 'debug'
+  logstash:
+    level: 'info'
+    host: 'localhost'
+    port: 5228
+```
+Level can be:
+
+1. unknown
+2. fatal
+3. error
+4. warn
+5. info - default for logstash
+6. debug - default for file
+
+For example level: 'warn' will log everything with warn and above.
+
 #### Examples
 
 Creating a new file logger
@@ -57,6 +79,30 @@ require('logasm')(logger_config, "application_name")
 <b>logger_config</b> should contain different logger types and their configuration in json format.
 
 <b>application_name</b> is the name of the application and it will be appended to the json message.
+
+#### Configuration
+
+```
+"loggers": {
+  "file": {
+    "level": "debug"
+  },
+  "logstash": {
+    "port": 5228,
+    "host": "127.0.0.1",
+    "level": "warn"
+  }
+}
+```
+Level can be:
+
+1. error
+2. warn
+3. info - default for logstash
+4. verbose
+5. debug - default for file
+
+For example "level": "warn" will log everything with warn and above.
 
 #### Examples
 
