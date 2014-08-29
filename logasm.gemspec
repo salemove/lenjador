@@ -7,8 +7,8 @@ Gem::Specification.new do |spec|
   spec.version       = '0.0.2'
   spec.authors       = ["Markus Mühle"]
   spec.email         = ["markus@salemove.com"]
-  spec.description   = %q{Logging gem}
-  spec.summary       = %q{ya}
+  spec.description   = %q{It's logasmic}
+  spec.summary       = %q{What description said}
   spec.license       = "Private"
 
   spec.files         = `git ls-files`.split($/)

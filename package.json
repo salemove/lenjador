@@ -1,8 +1,8 @@
 {
   "name": "logasm",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "author": "Markus Mühle <markus@salemove.com>",
-  "description": "Logger",
+  "description": "It's logasmic",
   "reporistory" : {
     "type" : "git",
     "url" : "https://github.com/salemove/logasm"
