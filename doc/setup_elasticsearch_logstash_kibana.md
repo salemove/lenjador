@@ -41,7 +41,8 @@ input {
   udp {
     host => "localhost"
     port => 5228
-    codec => json
+    codec => json_lines
+    buffer_size => 16384
   }
 }
 

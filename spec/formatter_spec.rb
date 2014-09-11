@@ -35,7 +35,7 @@ module LogStashLogger
     end
 
     def get_event_json(message)
-      response = formatter.call('debug', 0, nil, message)
+      response = formatter.call('debug', "2014-09-11 14:55:00 +0300", nil, message)
       JSON.parse(response)
     end
   end
