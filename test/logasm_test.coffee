@@ -1,8 +1,9 @@
 describe 'Logasm', ->
-  it 'creates logger when no options are specified', (done) ->
+  it 'creates file logger when no options are specified', (done) ->
     logasm = require('../lib/logasm')()
 
-    logasm.transports.should.eql({})
+    logasm.transports.should.not.eql({})
+    logasm.transports.console.should.exist
     done()
 
   it 'creates file logger', (done) ->
