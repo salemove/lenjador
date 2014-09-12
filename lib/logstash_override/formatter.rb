@@ -19,7 +19,7 @@ module LogStashLogger
       data = json.first if json
 
       if data.is_a?(String) && data.start_with?('{')
-        data = (JSON.parse(data) rescue nil) || data
+        data = (JSON.parse(data) rescue nil) || eval(data)
         data['message'] = if message.start_with?('{')
                             message.sub(/(\{.*\})/, "*parsed*")
                           elsif message.end_with?('}')
