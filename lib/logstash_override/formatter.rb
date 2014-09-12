@@ -42,6 +42,9 @@ module LogStashLogger
       event['application'] = @service_name if @service_name
 
       event['severity'] ||= severity
+      event['level'] = event['severity'].downcase
+      event.remove("severity")
+
       #event.type = progname
 
       event['host'] ||= HOST

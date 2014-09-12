@@ -34,6 +34,13 @@ module LogStashLogger
       expect(json['leet']).to eq(1337)
     end
 
+    it 'converts severity to level' do
+      json = get_event_json 'test_message'
+
+      expect(json['level']).to eq("debug")
+      expect(json['severity']).to eq(nil)
+    end
+
     def get_event_json(message)
       response = formatter.call('debug', "2014-09-11 14:55:00 +0300", nil, message)
       JSON.parse(response)
