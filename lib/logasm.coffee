@@ -4,6 +4,9 @@ module.exports = (loggers, service_name) ->
   logasm.timestamp = ->
     "#{new Date().toISOString()} ##{process.pid}"
 
+  unless loggers
+    add_logger "file", {}, service_name, logasm, winston
+
   for logger, options of loggers
     add_logger logger, options, service_name, logasm, winston
 
@@ -17,7 +20,7 @@ add_logger = (type, args, service_name, logasm, winston) ->
       timestamp = args.timestamp
 
     options =
-      level: args.level or 'info'
+      level: args.level or 'debug'
       colorize: args.colorize or true
       timestamp: timestamp
 
@@ -27,7 +30,7 @@ add_logger = (type, args, service_name, logasm, winston) ->
     LogasmLogstashUDP = require "./logstash_override/winston-logstash-udp"
 
     options =
-      port: args.port or 5228
+      port: args.port or 5229
       application: service_name or "undefined"
       host: args.host or "127.0.0.1"
       level: args.level or 'info'

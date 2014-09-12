@@ -40,14 +40,21 @@ vim logstash.conf
 input {
   udp {
     host => "localhost"
-    port => 5228
+    port => 5228 # For ruby apps
     codec => json_lines
+    buffer_size => 16384
+  }
+  udp {
+    host => "localhost"
+    port => 5229 # For node apps
+    codec => json
     buffer_size => 16384
   }
 }
 
 output {
-  elasticsearch { host => localhost
+  elasticsearch {
+    host => localhost
   }
 }
 ```
