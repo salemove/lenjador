@@ -70,7 +70,7 @@ sudo apt-get install logstash
 Create a configuration file for logstash
 
 ```
-cd /etc/logstash/cong.d
+cd /etc/logstash/conf.d
 sudo vim logstash.conf
 ```
 
