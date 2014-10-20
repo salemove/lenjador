@@ -28,6 +28,21 @@ or
 /etc/init.d/elasticsearch start
 ```
 
+#### Deleting old data
+
+```
+sudo apt-get install python-pip
+sudo pip install elasticsearch-curator
+```
+
+To delete data older than 4 weeks
+
+```
+curator delete --time-unit weeks --older-than 4
+```
+
+You can create a cron job to run this script every day.
+
 ### Old
 
 ```
