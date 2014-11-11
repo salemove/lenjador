@@ -46,16 +46,16 @@ You can create a cron job to run this script every day.
 ### Old
 
 ```
-curl -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.1.1.tar.gz
-tar zxvf elasticsearch-1.1.1.tar.gz
-cd elasticsearch-1.1.1/
+curl -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.3.2.tar.gz
+tar zxvf elasticsearch-1.3.2.tar.gz
+cd elasticsearch-1.3.2/
 ./bin/elasticsearch
 ```
 
 Configuration files are located in
 
 ```
-elasticsearch-1.1.1/config/
+elasticsearch-1.3.2/config/
 ```
 
 To start Elasticsearch
@@ -174,8 +174,14 @@ unzip kibana-latest.
 
 Install apache2 or something.
 
+linux:
 ```
 sudo mv ./kibana-latest/* /var/www/*
+```
+
+mac:
+```
+sudo mv ./kibana-latest/* /Library/WebServer/Documents/*
 ```
 
 Edit congig.js if needed
