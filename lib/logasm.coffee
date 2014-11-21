@@ -14,6 +14,8 @@ module.exports = (loggers, service_name) ->
 
 add_logger = (type, args, service_name, logasm, winston) ->
   if type is 'file'
+    require "./console_override/logasm_console"
+
     if typeof args.timestamp is 'undefined'
       timestamp = logasm.timestamp
     else
@@ -24,7 +26,7 @@ add_logger = (type, args, service_name, logasm, winston) ->
       colorize: args.colorize or true
       timestamp: timestamp
 
-    logasm.add winston.transports.Console, options
+    logasm.add winston.transports.LogasmConsole, options
 
   else if type is 'logstash'
     LogasmLogstashUDP = require "./logstash_override/winston-logstash-udp"

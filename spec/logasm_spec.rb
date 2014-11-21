@@ -3,7 +3,7 @@ require 'logasm'
 
 describe Logasm do
   it 'creates file logger' do
-    logasm = Logasm.new({file: nil},'test_service')
+    logasm = Logasm.new({file: nil}, 'test_service')
     number_of_loggers = logasm.loggers.count
 
     expect(number_of_loggers).to eq(1)
@@ -15,7 +15,7 @@ describe Logasm do
   end
 
   it 'creates logstash logger' do
-    logasm = Logasm.new({:logstash=>{:host=>"localhost", :port=>5228}},'test_service')
+    logasm = Logasm.new({logstash: {host: 'localhost', port: 5228}}, 'test_service')
     number_of_loggers = logasm.loggers.count
 
     expect(number_of_loggers).to eq(1)
@@ -27,7 +27,7 @@ describe Logasm do
   end
 
   it 'creates multiple loggers' do
-    logasm = Logasm.new({:file=>nil, :logstash=>{:host=>"localhost", :port=>5228}},'test_service')
+    logasm = Logasm.new({file: nil, logstash: {host: 'localhost', port: 5228}}, 'test_service')
     number_of_loggers = logasm.loggers.count
 
     expect(number_of_loggers).to eq(2)
