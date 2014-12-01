@@ -54,4 +54,19 @@ describe Logasm do
     expect(logdev).to be_a Logger::LogDevice
     expect(logdev.instance_variable_get(:@dev)).to be_a IO
   end
+
+  context 'when a logger throws an exception' do
+    let(:logasm) { Logasm.new({file: nil}, 'test_service') }
+    let(:internal_logger) { logasm.loggers.first }
+
+    before do
+      allow(internal_logger).to receive(:info) { raise 'A parse error' }
+    end
+
+    it 'does not crash the program' do
+      expect(internal_logger).to receive(:error).with('Logging using Logger failed: A parse error')
+      expect(internal_logger).to receive(:error).with(kind_of(String))
+      expect { logasm.info 'test' }.to_not raise_error
+    end
+  end
 end
