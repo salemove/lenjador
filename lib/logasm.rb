@@ -1,8 +1,12 @@
 require 'logstash-logger'
-require_relative './logstash_override/formatter.rb'
-require_relative './logstash_override/logger.rb'
+require_relative 'logstash_override/formatter'
+require_relative 'logstash_override/logger'
 
 class Logasm
+  LOG_LEVELS = %w(debug info warn error fatal unknown).freeze
+
+  attr_reader :loggers
+
   def initialize(loggers, service_name)
     @loggers = []
     @service_name = service_name
@@ -13,19 +17,20 @@ class Logasm
 
     loggers.each do |logger|
       logger_type = logger.first.to_s
-      logger_arguments = logger[1] ? logger[1] : {}
+      logger_arguments = logger[1] || {}
       @loggers.push create_logger(logger_type, logger_arguments)
     end
   end
 
-  def method_missing(m, *args, &block)
+  def method_missing(*args)
     @loggers.each do |logger|
-      logger.send(m,*args)
+      begin
+        logger.send(*args)
+      rescue => e
+        logger.error "Logging using #{logger.class.to_s} failed: #{e.message}"
+        logger.error e.backtrace.join("\n")
+      end
     end
-  end
-
-  def loggers
-    @loggers
   end
 
   private
@@ -50,21 +55,6 @@ class Logasm
   end
 
   def get_log_level(level)
-    case level
-    when 'debug'
-      0
-    when 'info'
-      1
-    when 'warn'
-      2
-    when 'error'
-      3
-    when 'fatal'
-      4
-    when 'unknown'
-      5
-    else
-      nil
-    end
+    LOG_LEVELS.index(level)
   end
 end
