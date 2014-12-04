@@ -1,63 +1,82 @@
 module LogStashLogger
   class Formatter < ::Logger::Formatter
-    include TaggedLogging::Formatter
 
     def initialize(service_name)
       @service_name = service_name
     end
 
-    def call(severity, time, progname, message)
-      event = build_event(message, severity, time)
-      "#{event.to_json}\n"
+    def call(severity, time, _progname, message)
+      Event.new(message, severity, time).to_h(@service_name).to_json + "\n"
     end
 
-    protected
+    private
 
-    def build_event(message, severity, time)
-      data = message
-      json = data.scan(/(\{.*\})/).first
-      data = json.first if json
+    class Event
+      include TaggedLogging::Formatter
 
-      if data.is_a?(String) && data.start_with?('{')
-        data = (JSON.parse(data) rescue nil) || eval(data)
-        data['message'] = if message.start_with?('{')
-                            message.sub(/(\{.*\})/, "*parsed*")
-                          elsif message.end_with?('}')
-                            message.sub(/(\{.*\})/, ":")
-                          else
-                            message.sub(/(\{.*\})/, "*parsed*")
-                          end
+      def initialize(message, severity, time)
+        @message = message
+        @severity = severity
+        @time = time
       end
 
-      event = case data
-                when LogStash::Event
-                  data.clone
-                when Hash
-                  event_data = data.merge("@timestamp" => time)
-                  LogStash::Event.new(event_data)
-                when String
-                  LogStash::Event.new("message" => data, "@timestamp" => time)
+      def to_h(service_name)
+        data = parse_data
+        event = build_event(data)
+
+        event['application'] = service_name if service_name
+        event['severity'] ||= @severity
+        event['level'] = event['severity'].downcase
+        event.remove("severity")
+
+        event['host'] ||= HOST
+
+        current_tags.each do |tag|
+          event.tag(tag)
+        end
+
+        # In case Time#to_json has been overridden
+        if event.timestamp.is_a?(Time)
+          event.timestamp = event.timestamp.iso8601(3)
+        end
+        event
+      end
+
+      def parse_data
+        data = @message
+        json = data.scan(/(\{.*\})/).first
+        data = json.first if json
+
+        if data.is_a?(String) && data.start_with?('{')
+          begin
+            data = JSON.parse(data)
+            data['message'] =
+              if @message.start_with?('{')
+                @message.sub(/(\{.*\})/, "*parsed*")
+              elsif @message.end_with?('}')
+                @message.sub(/(\{.*\})/, ":")
+              else
+                @message.sub(/(\{.*\})/, "*parsed*")
               end
+          rescue JSON::ParserError
+            data = @message
+          end
+        end
 
-      event['application'] = @service_name if @service_name
-
-      event['severity'] ||= severity
-      event['level'] = event['severity'].downcase
-      event.remove("severity")
-
-      #event.type = progname
-
-      event['host'] ||= HOST
-
-      current_tags.each do |tag|
-        event.tag(tag)
+        data
       end
 
-      # In case Time#to_json has been overridden
-      if event.timestamp.is_a?(Time)
-        event.timestamp = event.timestamp.iso8601(3)
+      def build_event(data)
+        case data
+        when LogStash::Event
+          data.clone
+        when Hash
+          event_data = data.merge("@timestamp" => @time)
+          LogStash::Event.new(event_data)
+        when String
+          LogStash::Event.new("message" => data, "@timestamp" => @time)
+        end
       end
-      event
     end
   end
 end

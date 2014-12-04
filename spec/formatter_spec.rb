@@ -41,6 +41,12 @@ module LogStashLogger
       expect(json['severity']).to eq(nil)
     end
 
+    it 'uses input as a message when parsing fails' do
+      json = get_event_json 'hi {{"invalid":"json"} lol'
+
+      expect(json['message']).to eq('hi {{"invalid":"json"} lol')
+    end
+
     def get_event_json(message)
       response = formatter.call('debug', "2014-09-11 14:55:00 +0300", nil, message)
       JSON.parse(response)
