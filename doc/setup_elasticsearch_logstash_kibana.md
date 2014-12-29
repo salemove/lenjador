@@ -89,18 +89,21 @@ cd /etc/logstash/conf.d
 sudo vim logstash.conf
 ```
 
+Replace localhost with your IP if you want logstash to recieve logs from other servers.
 ```
 input {
   udp {
     host => "localhost"
     port => 5228 # For ruby apps
     codec => json_lines
+    queue_size => 20000
     buffer_size => 16384
   }
   udp {
     host => "localhost"
     port => 5229 # For node apps
     codec => json
+    queue_size => 20000
     buffer_size => 16384
   }
 }
@@ -176,12 +179,14 @@ Install apache2 or something.
 
 linux:
 ```
-sudo mv ./kibana-latest/* /var/www/*
+sudo mkdir /var/www/html
+sudo mv ./kibana-latest/* /var/www/html
 ```
 
 mac:
 ```
-sudo mv ./kibana-latest/* /Library/WebServer/Documents/*
+sudo mkdir /Library/WebServer/Documents/html
+sudo mv ./kibana-latest/* /Library/WebServer/Documents/html
 ```
 
 Edit congig.js if needed
