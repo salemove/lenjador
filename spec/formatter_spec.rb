@@ -12,39 +12,11 @@ module LogStashLogger
       expect(json['application']).to eq('test_service')
     end
 
-    it 'adds message when no json is found' do
-      json = get_event_json 'test_message'
-
-      expect(json['message']).to eq('test_message')
-    end
-
-    it 'parses json' do
-      json = get_event_json '{"not_message":"test_message","leet":1337}'
-
-      expect(json['message']).to eq("*parsed*")
-      expect(json['not_message']).to eq('test_message')
-      expect(json['leet']).to eq(1337)
-    end
-
-    it 'parses json from text' do
-      json = get_event_json 'hi {"not_message":"test_message","leet":1337} lol'
-
-      expect(json['message']).to eq('hi *parsed* lol')
-      expect(json['not_message']).to eq('test_message')
-      expect(json['leet']).to eq(1337)
-    end
-
     it 'converts severity to level' do
       json = get_event_json 'test_message'
 
       expect(json['level']).to eq("debug")
       expect(json['severity']).to eq(nil)
-    end
-
-    it 'uses input as a message when parsing fails' do
-      json = get_event_json 'hi {{"invalid":"json"} lol'
-
-      expect(json['message']).to eq('hi {{"invalid":"json"} lol')
     end
 
     def get_event_json(message)

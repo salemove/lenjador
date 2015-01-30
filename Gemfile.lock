@@ -1,7 +1,8 @@
 PATH
   remote: .
   specs:
-    logasm (0.0.3)
+    logasm (0.1.0)
+      logstash-event (~> 1.2)
       logstash-logger (~> 0.6.0)
 
 GEM

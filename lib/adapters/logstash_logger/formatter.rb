@@ -44,23 +44,8 @@ module LogStashLogger
 
       def parse_data
         data = @message
-        json = data.scan(/(\{.*\})/).first
-        data = json.first if json
-
         if data.is_a?(String) && data.start_with?('{')
-          begin
-            data = JSON.parse(data)
-            data['message'] =
-              if @message.start_with?('{')
-                @message.sub(/(\{.*\})/, "*parsed*")
-              elsif @message.end_with?('}')
-                @message.sub(/(\{.*\})/, ":")
-              else
-                @message.sub(/(\{.*\})/, "*parsed*")
-              end
-          rescue JSON::ParserError
-            data = @message
-          end
+          data = (JSON.parse(@message) rescue nil) || @message
         end
 
         data
