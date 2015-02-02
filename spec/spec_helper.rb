@@ -7,3 +7,5 @@ end
 
 require 'pry'
 require 'securerandom'
+
+require 'logasm'

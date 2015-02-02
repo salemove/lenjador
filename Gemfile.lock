@@ -2,27 +2,17 @@ PATH
   remote: .
   specs:
     logasm (0.1.0)
+      inflecto
       logstash-event (~> 1.2)
-      logstash-logger (~> 0.6.0)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    atomic (1.1.16)
-    avl_tree (1.2.0)
     coderay (1.1.0)
     diff-lcs (1.2.5)
-    ffi (1.9.6)
-    hitimes (1.2.2)
+    inflecto (0.0.2)
     logstash-event (1.2.02)
-    logstash-logger (0.6.2)
-      logstash-event (~> 1.2)
-      stud
     method_source (0.8.2)
-    metriks (0.9.9.7)
-      atomic (~> 1.0)
-      avl_tree (~> 1.2.0)
-      hitimes (~> 1.1)
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -41,9 +31,6 @@ GEM
       rspec-support (~> 3.1.0)
     rspec-support (3.1.0)
     slop (3.6.0)
-    stud (0.0.17)
-      ffi
-      metriks
 
 PLATFORMS
   ruby

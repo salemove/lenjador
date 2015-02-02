@@ -1,106 +1,77 @@
 require 'spec_helper'
-require 'logasm'
 
-module Logasm
-  describe Logasm do
+describe Logasm do
+  describe '.build' do
     it 'creates file logger' do
-      logasm = Logasm.new({file: nil}, 'test_service')
-      number_of_loggers = logasm.loggers.count
+      expect(described_class).to receive(:new) do |adapters|
+        expect(adapters.count).to be(1)
+        expect(adapters.first).to be_a(described_class::Adapters::StdoutAdapter)
+      end
 
-      expect(number_of_loggers).to eq(1)
-
-      logger = logasm.loggers[0].instance_variable_get(:@logger)
-      expect(logger).to be_a Logger
-
-      logdev = logger.instance_variable_get(:@logdev)
-
-      expect(logdev).to be_a Logger::LogDevice
-      expect(logdev.instance_variable_get(:@dev)).to be_a IO
+      described_class.build('test_service', stdout: nil)
     end
 
     it 'creates logstash logger' do
-      logasm = Logasm.new({logstash: {host: 'localhost', port: 5228}}, 'test_service')
-      number_of_loggers = logasm.loggers.count
+      expect(described_class).to receive(:new) do |adapters|
+        expect(adapters.count).to be(1)
+        expect(adapters.first).to be_a(described_class::Adapters::LogstashAdapter)
+      end
 
-      expect(number_of_loggers).to eq(1)
-
-      logger = logasm.loggers[0].instance_variable_get(:@logger)
-      expect(logger).to be_a Logger
-
-      logdev = logger.instance_variable_get(:@logdev)
-
-      expect(logdev).to be_a Logger::LogDevice
-      expect(logdev.instance_variable_get(:@dev)).to be_a LogStashLogger::Device::UDP
+      described_class.build('test_service', logstash: {host: 'localhost', port: 5228})
     end
 
     it 'creates multiple loggers' do
-      logasm = Logasm.new({file: nil, logstash: {host: 'localhost', port: 5228}}, 'test_service')
-      number_of_loggers = logasm.loggers.count
+      expect(described_class).to receive(:new) do |adapters|
+        expect(adapters.count).to be(2)
+        expect(adapters.first).to be_a(described_class::Adapters::StdoutAdapter)
+        expect(adapters.last).to be_a(described_class::Adapters::LogstashAdapter)
+      end
 
-      expect(number_of_loggers).to eq(2)
-
-      logger_io = logasm.loggers[0].instance_variable_get(:@logger)
-      expect(logger_io).to be_a Logger
-
-      logdev_io = logger_io.instance_variable_get(:@logdev)
-
-      expect(logdev_io).to be_a Logger::LogDevice
-      expect(logdev_io.instance_variable_get(:@dev)).to be_a IO
-
-      logger_logstash = logasm.loggers[1].instance_variable_get(:@logger)
-      expect(logger_logstash).to be_a Logger
-
-      logdev_logstash = logger_logstash.instance_variable_get(:@logdev)
-
-      expect(logdev_logstash).to be_a Logger::LogDevice
-      expect(logdev_logstash.instance_variable_get(:@dev)).to be_a LogStashLogger::Device::UDP
+      described_class.build('test_service', stdout: nil, logstash: {host: 'localhost', port: 5228})
     end
 
     it 'creates file logger when no loggers are specified' do
-      logasm = Logasm.new(nil,'test_service')
-      number_of_loggers = logasm.loggers.count
+      expect(described_class).to receive(:new) do |adapters|
+        expect(adapters.count).to be(1)
+        expect(adapters.first).to be_a(described_class::Adapters::StdoutAdapter)
+      end
 
-      expect(number_of_loggers).to eq(1)
+      described_class.build('test_service', nil)
+    end
+  end
 
-      logger = logasm.loggers[0].instance_variable_get(:@logger)
-      expect(logger).to be_a Logger
+  context 'when parsing log data' do
+    let(:logasm) { described_class.new([adapter]) }
+    let(:adapter) { double }
 
-      logdev = logger.instance_variable_get(:@logdev)
+    it 'parses empty string with nil metadata' do
+      expect(adapter).to receive(:log).with(:info, message: '')
 
-      expect(logdev).to be_a Logger::LogDevice
-      expect(logdev.instance_variable_get(:@dev)).to be_a IO
+      logasm.info('', nil)
     end
 
-    context 'when parsing log data' do
-      let!(:logasm) { Logasm.new(nil,'test_service') }
+    it 'parses nil as metadata' do
+      expect(adapter).to receive(:log).with(:info, message: nil)
 
-      it 'parses no message and no metadata' do
-        message, metadata = logasm.send :parse_log_data
+      logasm.info(nil)
+    end
 
-        expect(message).to eq(nil)
-        expect(metadata).to eq({})
-      end
+    it 'parses only message' do
+      expect(adapter).to receive(:log).with(:info, message: 'test message')
 
-      it 'parses only message' do
-        message, metadata = logasm.send :parse_log_data, 'test message'
+      logasm.info 'test message'
+    end
 
-        expect(message).to eq('test message')
-        expect(metadata).to eq({})
-      end
+    it 'parses only metadata' do
+      expect(adapter).to receive(:log).with(:info, test: 'data')
 
-      it 'parses only metadata' do
-        message, metadata = logasm.send :parse_log_data, test: 'data'
+      logasm.info test: 'data'
+    end
 
-        expect(message).to eq(nil)
-        expect(metadata).to eq({test: 'data'})
-      end
+    it 'parses message and metadata' do
+      expect(adapter).to receive(:log).with(:info, message: 'test message', test: 'data')
 
-      it 'parses message and metadata' do
-        message, metadata = logasm.send :parse_log_data, 'test message', test: 'data'
-
-        expect(message).to eq('test message')
-        expect(metadata).to eq({test: 'data'})
-      end
+      logasm.info 'test message', test: 'data'
     end
   end
 end
