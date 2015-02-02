@@ -2,22 +2,23 @@
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
-Gem::Specification.new do |spec|
-  spec.name          = "logasm"
-  spec.version       = '0.0.3'
-  spec.authors       = ["Markus Mühle"]
-  spec.email         = ["markus@salemove.com"]
-  spec.description   = %q{It's logasmic}
-  spec.summary       = %q{What description said}
-  spec.license       = "Private"
+Gem::Specification.new do |gem|
+  gem.name          = "logasm"
+  gem.version       = '0.1.0'
+  gem.authors       = ["Markus Mühle"]
+  gem.email         = ["markus@salemove.com"]
+  gem.description   = %q{It's logasmic}
+  gem.summary       = %q{What description said}
+  gem.license       = "Private"
 
-  spec.files         = `git ls-files`.split($/)
-  spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
-  spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
-  spec.require_paths = ["lib"]
+  gem.files         = `git ls-files`.split($/)
+  gem.executables   = gem.files.grep(%r{^bin/}) { |f| File.basename(f) }
+  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
+  gem.require_paths = ["lib"]
 
-  spec.add_development_dependency "bundler", "~> 1.3"
-  spec.add_development_dependency "rake"
+  gem.add_dependency 'logstash-event', '~> 1.2'
+  gem.add_dependency 'inflecto'
 
-  spec.add_dependency "logstash-logger", "~> 0.6.0"
+  gem.add_development_dependency "bundler", "~> 1.3"
+  gem.add_development_dependency "rake"
 end
