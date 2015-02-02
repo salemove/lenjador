@@ -5,8 +5,8 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 Gem::Specification.new do |gem|
   gem.name          = "logasm"
   gem.version       = '0.1.0'
-  gem.authors       = ["Markus Mühle"]
-  gem.email         = ["markus@salemove.com"]
+  gem.authors       = ["Salemove"]
+  gem.email         = ["support@salemove.com"]
   gem.description   = %q{It's logasmic}
   gem.summary       = %q{What description said}
   gem.license       = "Private"

@@ -6,12 +6,12 @@ Logasm
 ### Creating a new Logasm logger in Ruby
 
 ```ruby
-Logasm.new(application_name, logger_config)
+Logasm.build(application_name, logger_config)
 ```
 
-<b>application_name</b> is the name of the application and it will be appended to the json message.
+<b>application_name</b> is the name of the application. Only logstash logger will use this.
 
-<b>logger_config</b> should contain different logger types and their configuration in json format.
+<b>logger_config</b> is a hash with logger types and their configuration.
 
 #### Configuration
 
@@ -49,7 +49,7 @@ Creating a new logstash logger
 ```ruby
 require 'logasm'
 
-logasm = Logasm.build('myApp', logstash: {host: "localhost", port: 5228})
+logasm = Logasm.build('myApp', logstash: { host: "localhost", port: 5228 })
 ```
 
 Creating a new logger that logs into stdout and logstash at the same time
@@ -57,7 +57,7 @@ Creating a new logger that logs into stdout and logstash at the same time
 ```ruby
 require 'logasm'
 
-logasm = Logasm.new('myApp', { stdout: nil, logstash: {:host=>"localhost", :port=>5228} })
+logasm = Logasm.build('myApp', { stdout: nil, logstash: { host: "localhost", port: 5228 }})
 ```
 
 When no loggers are specified, it creates a stdout logger by default.
