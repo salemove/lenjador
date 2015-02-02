@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["support@salemove.com"]
   gem.description   = %q{It's logasmic}
   gem.summary       = %q{What description said}
-  gem.license       = "Private"
+  gem.license       = "MIT"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}) { |f| File.basename(f) }
