@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    logasm (0.1.0)
+    logasm (0.1.1)
       inflecto
       logstash-event (~> 1.2)
 

@@ -6,7 +6,9 @@ class Logasm
     class LogstashAdapter
       attr_reader :logger
 
-      def initialize(level, service, host:, port:, **)
+      def initialize(level, service, arguments = {})
+        host = arguments.fetch(:host)
+        port = arguments.fetch(:port)
         device = UDPSocket.new.tap do |socket|
           socket.connect(host, port)
         end
