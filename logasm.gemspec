@@ -18,6 +18,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'logstash-event', '~> 1.2'
   gem.add_dependency 'inflecto'
+  gem.add_dependency 'bunny', '~> 1.6.3'
 
   gem.add_development_dependency "bundler", "~> 1.3"
   gem.add_development_dependency "rake"

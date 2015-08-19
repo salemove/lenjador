@@ -1,5 +1,6 @@
 require 'socket'
 require 'logstash-event'
+require_relative 'logstash_adapter/formatter'
 
 class Logasm
   module Adapters
