@@ -1,4 +1,5 @@
 require 'spec_helper'
+require_relative '../../lib/logasm/adapters/rabbitmq_adapter'
 
 describe Logasm::Adapters::RabbitmqAdapter do
   let(:publisher) { adapter.publisher }
@@ -31,7 +32,6 @@ describe Logasm::Adapters::RabbitmqAdapter do
 
       it 'does not delegate to freddy' do
         expect(publisher).not_to receive(:publish)
-
         adapter.log :info, message: 'test'
       end
     end

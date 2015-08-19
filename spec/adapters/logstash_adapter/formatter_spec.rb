@@ -1,4 +1,5 @@
 require 'spec_helper'
+require_relative '../../../lib/logasm/adapters/logstash_adapter/formatter'
 
 describe Logasm::Adapters::LogstashAdapter::Formatter do
   subject(:event) { JSON.parse(formatter.call(severity, time, nil, message)) }

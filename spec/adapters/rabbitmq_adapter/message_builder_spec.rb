@@ -1,4 +1,5 @@
 require 'spec_helper'
+require_relative '../../../lib/logasm/adapters/rabbitmq_adapter/message_builder'
 
 describe Logasm::Adapters::RabbitmqAdapter::MessageBuilder do
   subject { message_builder.build_message(metadata, level) }

@@ -1,4 +1,5 @@
 require 'spec_helper'
+require_relative '../../lib/logasm/adapters/logstash_adapter'
 
 describe Logasm::Adapters::LogstashAdapter do
   let(:logstash) { described_class.new(0, 'test_service', { host: 'localhost', port: '5228'}) }
