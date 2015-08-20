@@ -1,9 +1,6 @@
 require 'inflecto'
 require 'logger'
 require_relative 'logasm/adapters'
-require_relative 'logasm/adapters/stdout_adapter'
-require_relative 'logasm/adapters/logstash_adapter'
-require_relative 'logasm/adapters/rabbitmq_adapter'
 
 class Logasm
   def self.build(service_name, loggers_config)

@@ -1,8 +1,7 @@
 PATH
   remote: .
   specs:
-    logasm (0.1.1)
-      bunny (~> 1.6.3)
+    logasm (0.2.0)
       inflecto
       logstash-event (~> 1.2)
 
@@ -10,10 +9,18 @@ GEM
   remote: https://rubygems.org/
   specs:
     amq-protocol (2.0.0)
+    atomic (1.1.99)
     bunny (1.6.3)
       amq-protocol (>= 1.9.2)
     coderay (1.1.0)
     diff-lcs (1.2.5)
+    freddy (0.4.1)
+      bunny (= 1.6.3)
+      hamster (~> 1.0.1.pre.rc3)
+      symbolizer
+      thread (~> 0.2)
+    hamster (1.0.1.pre.rc3)
+      atomic (~> 1.1)
     inflecto (0.0.2)
     logstash-event (1.2.02)
     method_source (0.8.2)
@@ -36,12 +43,15 @@ GEM
       rspec-support (~> 3.3.0)
     rspec-support (3.3.0)
     slop (3.6.0)
+    symbolizer (0.0.1)
+    thread (0.2.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   bundler (~> 1.3)
+  freddy (~> 0.4.1)
   logasm!
   pry
   rake

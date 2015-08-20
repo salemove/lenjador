@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'logasm'
+require_relative '../../lib/logasm/adapters/stdout_adapter'
 
 describe Logasm::Adapters::StdoutAdapter do
   it 'creates a stdout logger' do

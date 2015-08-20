@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |gem|
   gem.name          = "logasm"
-  gem.version       = '0.1.1'
+  gem.version       = '0.2.0'
   gem.authors       = ["Salemove"]
   gem.email         = ["support@salemove.com"]
   gem.description   = %q{It's logasmic}
@@ -18,8 +18,8 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'logstash-event', '~> 1.2'
   gem.add_dependency 'inflecto'
-  gem.add_dependency 'bunny', '~> 1.6.3'
 
   gem.add_development_dependency "bundler", "~> 1.3"
   gem.add_development_dependency "rake"
+  gem.add_development_dependency "freddy", "~> 0.4.1"
 end

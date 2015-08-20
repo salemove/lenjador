@@ -1,5 +1,13 @@
+begin
+  require 'freddy'
+rescue LoadError => e
+  raise unless e.message =~ /freddy/
+  exception = e.exception('To use RabbitMQ adapter for logging, please install freddy!')
+  exception.set_backtrace(e.backtrace)
+  raise exception
+end
+
 require_relative 'rabbitmq_adapter/message_builder'
-require_relative 'rabbitmq_adapter/publisher'
 
 class Logasm
   module Adapters
@@ -10,17 +18,18 @@ class Logasm
 
       def initialize(level, service, arguments = {})
         config = arguments.select { |key, value| CONFIGURATION_KEYS.include?(key) }
-        queue = arguments.fetch(:queue, 'logstash-queue')
+        logger = Logger.new(STDOUT)
+        @queue = arguments.fetch(:queue, 'logstash-queue')
         @level = level
-        @message_builder = MessageBuilder.new(service)
 
-        @publisher = Publisher.new(queue, config)
+        @message_builder = MessageBuilder.new(service)
+        @freddy = Freddy.build(logger, config)
       end
 
       def log(level, metadata = {})
         if meets_threshold?(level)
           message = @message_builder.build_message metadata, level
-          @publisher.publish message
+          @freddy.deliver @queue, metadata
         end
       end
 
