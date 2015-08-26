@@ -12,7 +12,7 @@ require_relative 'rabbitmq_adapter/message_builder'
 class Logasm
   module Adapters
     class RabbitmqAdapter
-      attr_reader :publisher
+      attr_reader :freddy
 
       CONFIGURATION_KEYS = [:host, :user, :pass, :port]
 
