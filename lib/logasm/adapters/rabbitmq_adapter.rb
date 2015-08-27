@@ -21,15 +21,14 @@ class Logasm
         logger = Logger.new(STDOUT)
         @queue = arguments.fetch(:queue, 'logstash-queue')
         @level = level
-
         @message_builder = MessageBuilder.new(service)
-        @freddy = Freddy.build(logger, config)
+        @freddy = Freddy.build(logger, config.merge({recover_from_connection_close: true}))
       end
 
       def log(level, metadata = {})
         if meets_threshold?(level)
           message = @message_builder.build_message metadata, level
-          @freddy.deliver @queue, metadata
+          deliver_message message
         end
       end
 
@@ -37,6 +36,11 @@ class Logasm
 
       def meets_threshold?(level)
         LOG_LEVELS.index(level.to_s) >= @level
+      end
+
+      def deliver_message(message)
+        @freddy.deliver @queue, message
+      rescue Bunny::ConnectionClosedError
       end
     end
   end
