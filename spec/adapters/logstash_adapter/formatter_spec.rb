@@ -16,6 +16,14 @@ describe Logasm::Adapters::LogstashAdapter::Formatter do
     end
   end
 
+  context 'when service name is in camelcase' do
+    let(:service_name) { 'InformationService' }
+
+    it 'includes it in the event as lower snake case' do
+      expect(event['application']).to eq('information_service')
+    end
+  end
+
   context 'when service name is not present' do
     let(:service_name) { nil }
 

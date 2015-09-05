@@ -18,7 +18,10 @@ class Logasm
         def build_event(metadata, level, time)
           event = LogStash::Event.new(metadata.merge("@timestamp" => time))
 
-          event['application'] = @service_name if @service_name
+          if application_name = generate_application_name
+            event['application'] = application_name
+          end
+
           event['level'] = level.downcase
           event['host'] ||= HOST
 
@@ -28,6 +31,20 @@ class Logasm
           end
 
           event
+        end
+
+        # Return application name
+        #
+        # Returns lower snake case application name. This allows the
+        # application value to be used in the elasticsearch index name.
+        #
+        # @return [String, nil]
+        def generate_application_name
+          if @service_name
+            Inflecto.underscore(@service_name)
+          else
+            nil
+          end
         end
       end
     end
