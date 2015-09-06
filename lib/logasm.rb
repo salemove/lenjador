@@ -1,6 +1,8 @@
 require 'inflecto'
 require 'logger'
+require 'json'
 require_relative 'logasm/adapters'
+require_relative 'logasm/utils'
 
 class Logasm
   def self.build(service_name, loggers_config)

@@ -16,4 +16,12 @@ describe Logasm::Adapters::RabbitmqAdapter::MessageBuilder do
     expect(subject).to have_key(:host)
     expect(subject).to have_key(:@timestamp)
   end
+
+  context 'when service name is camelcase' do
+    let(:service_name) { 'InformationService' }
+
+    it 'converts it to lower snake case' do
+      expect(subject[:application]).to eq('information_service')
+    end
+  end
 end
