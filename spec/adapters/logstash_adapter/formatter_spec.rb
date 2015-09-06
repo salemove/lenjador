@@ -2,45 +2,19 @@ require 'spec_helper'
 require_relative '../../../lib/logasm/adapters/logstash_adapter/formatter'
 
 describe Logasm::Adapters::LogstashAdapter::Formatter do
-  subject(:event) { JSON.parse(formatter.call(severity, time, nil, message)) }
+  subject(:event) { formatter.call(severity, Time.now, nil, message) }
 
-  let(:formatter) { described_class.new(service_name) }
+  let(:formatter)    { described_class.new(service_name) }
   let(:service_name) { 'test_service' }
-  let(:severity) { 'INFO' }
-  let(:time) { Time.now }
-  let(:message) { {} }
+  let(:severity)     { 'INFO' }
+  let(:message)      { {x: 'y'} }
 
-  context 'when service name is present' do
-    it 'includes it in the event as application' do
-      expect(event['application']).to eq('test_service')
-    end
-  end
-
-  context 'when service name is in camelcase' do
-    let(:service_name) { 'InformationService' }
-
-    it 'includes it in the event as lower snake case' do
-      expect(event['application']).to eq('information_service')
-    end
-  end
-
-  context 'when service name is not present' do
-    let(:service_name) { nil }
-
-    it 'includes does not include the application key' do
-      expect(event).to_not have_key('application')
-    end
-  end
-
-  it 'includes severity as lowercase level' do
-    expect(event['level']).to eq('info')
-  end
-
-  it 'includes timestamp' do
-    expect(event['@timestamp']).to match(/\d{4}.*/)
-  end
-
-  it 'includes the host' do
-    expect(event['host']).to be_a(String)
+  it 'returns correct json' do
+    hash = JSON.parse(subject)
+    expect(hash['x']).to eq('y')
+    expect(hash['application']).to eq('test_service')
+    expect(hash['level']).to eq('info')
+    expect(hash['host']).to be_a(String)
+    expect(hash['@timestamp']).to match(/\d{4}-\d{2}-\d{2}T.*/)
   end
 end

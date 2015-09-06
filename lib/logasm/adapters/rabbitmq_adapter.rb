@@ -7,8 +7,6 @@ rescue LoadError => e
   raise exception
 end
 
-require_relative 'rabbitmq_adapter/message_builder'
-
 class Logasm
   module Adapters
     class RabbitmqAdapter
@@ -16,18 +14,18 @@ class Logasm
 
       CONFIGURATION_KEYS = [:host, :user, :pass, :port]
 
-      def initialize(level, service, arguments = {})
+      def initialize(level, service_name, arguments = {})
         config = arguments.select { |key, value| CONFIGURATION_KEYS.include?(key) }
         logger = Logger.new(STDOUT)
         @queue = arguments.fetch(:queue, 'logstash-queue')
         @level = level
-        @message_builder = MessageBuilder.new(service)
+        @service_name = service_name
         @freddy = Freddy.build(logger, config.merge({recover_from_connection_close: true}))
       end
 
       def log(level, metadata = {})
         if meets_threshold?(level)
-          message = @message_builder.build_message metadata, level
+          message = Utils.build_event(metadata, level, @service_name)
           deliver_message message
         end
       end
