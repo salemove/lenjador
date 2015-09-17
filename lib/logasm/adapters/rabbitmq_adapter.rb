@@ -16,7 +16,7 @@ class Logasm
 
       def initialize(level, service_name, arguments = {})
         config = arguments.select { |key, value| CONFIGURATION_KEYS.include?(key) }
-        logger = Logger.new(STDOUT)
+        logger = NullLogger.new
         @queue = arguments.fetch(:queue, 'logstash-queue')
         @level = level
         @service_name = service_name

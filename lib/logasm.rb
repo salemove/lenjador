@@ -3,6 +3,7 @@ require 'logger'
 require 'json'
 require_relative 'logasm/adapters'
 require_relative 'logasm/utils'
+require_relative 'logasm/null_logger'
 
 class Logasm
   def self.build(service_name, loggers_config)
