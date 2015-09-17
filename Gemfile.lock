@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    logasm (0.2.2)
+    logasm (0.2.3)
       inflecto
 
 GEM
@@ -54,3 +54,6 @@ DEPENDENCIES
   pry
   rake
   rspec
+
+BUNDLED WITH
+   1.10.6
