@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    logasm (0.2.3)
+    logasm (0.2.4)
       inflecto
 
 GEM
