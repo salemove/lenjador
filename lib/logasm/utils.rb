@@ -12,12 +12,12 @@ class Logasm
     #
     # @return [Hash]
     def self.build_event(metadata, level, service_name)
-      metadata.merge(
-        application: application_name(service_name),
-        level: level.to_s.downcase,
-        host: HOST,
-        :@timestamp => Time.now.utc.iso8601(3)
-      )
+      overwritable_params
+        .merge(metadata)
+        .merge(
+          application: application_name(service_name),
+          level: level.to_s.downcase
+        )
     end
 
     # Return application name
@@ -31,5 +31,13 @@ class Logasm
     def self.application_name(service_name)
       Inflecto.underscore(service_name)
     end
+
+    def self.overwritable_params
+      {
+        :@timestamp => Time.now.utc.iso8601(3),
+        host: HOST
+      }
+    end
+    private_class_method :overwritable_params
   end
 end

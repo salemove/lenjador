@@ -13,7 +13,7 @@ GEM
       amq-protocol (>= 1.9.2)
     coderay (1.1.0)
     diff-lcs (1.2.5)
-    freddy (0.4.1)
+    freddy (0.4.2)
       bunny (= 1.6.3)
       hamster (~> 1.0.1.pre.rc3)
       symbolizer

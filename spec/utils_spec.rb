@@ -33,5 +33,23 @@ describe Logasm::Utils do
     it 'includes the host' do
       expect(event[:host]).to be_a(String)
     end
+
+    context 'when @timestamp provided' do
+      let(:metadata) { {message: 'test', :@timestamp => 'a timestamp'} }
+
+      it 'overwrites @timestamp' do
+        expect(subject[:message]).to eq('test')
+        expect(subject[:@timestamp]).to eq('a timestamp')
+      end
+    end
+
+    context 'when host provided' do
+      let(:metadata) { {message: 'test', host: 'xyz'} }
+
+      it 'overwrites host' do
+        expect(subject[:message]).to eq('test')
+        expect(subject[:host]).to eq('xyz')
+      end
+    end
   end
 end
