@@ -34,7 +34,7 @@ class Logasm
 
     def self.overwritable_params
       {
-        :@timestamp => Time.now.utc.iso8601(3),
+        :@timestamp => Time.now.utc.iso8601,
         host: HOST
       }
     end
