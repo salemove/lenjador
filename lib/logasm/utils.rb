@@ -3,6 +3,7 @@ require 'socket'
 class Logasm
   module Utils
     HOST = ::Socket.gethostname
+    DECIMAL_FRACTION_OF_SECOND = 3
 
     # Build logstash json compatible event
     #
@@ -34,7 +35,7 @@ class Logasm
 
     def self.overwritable_params
       {
-        :@timestamp => Time.now.utc.iso8601,
+        :@timestamp => Time.now.utc.iso8601(DECIMAL_FRACTION_OF_SECOND),
         host: HOST
       }
     end
