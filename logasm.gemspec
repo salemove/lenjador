@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |gem|
   gem.name          = "logasm"
-  gem.version       = '0.2.4'
+  gem.version       = '0.2.5'
   gem.authors       = ["Salemove"]
   gem.email         = ["support@salemove.com"]
   gem.description   = %q{It's logasmic}
