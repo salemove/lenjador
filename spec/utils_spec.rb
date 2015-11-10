@@ -8,6 +8,10 @@ describe Logasm::Utils do
     let(:level)        { 'INFO' }
     let(:metadata)     { {x: 'y'} }
 
+    before do
+      allow(Time).to receive(:now) { Time.utc(2015, 10, 11, 23, 10, 21, 123456) }
+    end
+
     context 'when service name is in correct format' do
       it 'includes it in the event as application' do
         expect(event[:application]).to eq('test_service')
@@ -27,7 +31,7 @@ describe Logasm::Utils do
     end
 
     it 'includes timestamp' do
-      expect(event[:@timestamp]).to match(/\d{4}.*/)
+      expect(event[:@timestamp]).to eq('2015-10-11T23:10:21.123Z')
     end
 
     it 'includes the host' do
