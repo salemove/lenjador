@@ -5,6 +5,8 @@ require_relative 'logasm/adapters'
 require_relative 'logasm/utils'
 require_relative 'logasm/null_logger'
 
+LOG_LEVEL_QUERY_METHODS = [:debug?, :info?, :warn?, :error?, :fatal?]
+
 class Logasm
   def self.build(service_name, loggers_config)
     loggers_config ||= {stdout: nil}
@@ -36,6 +38,14 @@ class Logasm
 
   def fatal(*args)
     log :fatal, *args
+  end
+
+  def method_missing(method, *args)
+    if LOG_LEVEL_QUERY_METHODS.include?(method)
+      @adapters.any? {|adapter| adapter.public_send(method) }
+    else
+      super
+    end
   end
 
   private

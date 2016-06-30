@@ -74,4 +74,44 @@ describe Logasm do
       logasm.info 'test message', test: 'data'
     end
   end
+
+  context 'log level queries' do
+    context 'when one adapter has debug level' do
+      let(:logger) do
+        described_class.build(
+          'test_service',
+          stdout: {level: 'debug'},
+          logstash: {level: 'info', host: '127.0.0.1', port: 5228 },
+          rabbitmq: {level: 'fatal'},
+        )
+      end
+
+      it 'responds true to debug? and higher levels' do
+        expect(logger.debug?).to be(true)
+        expect(logger.info?).to be(true)
+        expect(logger.warn?).to be(true)
+        expect(logger.error?).to be(true)
+        expect(logger.fatal?).to be(true)
+      end
+    end
+
+    context 'when one adapter has info level' do
+      let(:logger) do
+        described_class.build(
+          'test_service',
+          rabbitmq: {level: 'info'},
+          stdout: {level: 'warn'},
+          logstash: {level: 'warn', host: '127.0.0.1', port: 5228 },
+        )
+      end
+
+      it 'responds true to info? and higher levels' do
+        expect(logger.debug?).to be(false)
+        expect(logger.info?).to be(true)
+        expect(logger.warn?).to be(true)
+        expect(logger.error?).to be(true)
+        expect(logger.fatal?).to be(true)
+      end
+    end
+  end
 end

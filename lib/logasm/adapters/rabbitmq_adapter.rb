@@ -30,6 +30,26 @@ class Logasm
         end
       end
 
+      def debug?
+        meets_threshold?(:debug)
+      end
+
+      def info?
+        meets_threshold?(:info)
+      end
+
+      def warn?
+        meets_threshold?(:warn)
+      end
+
+      def error?
+        meets_threshold?(:error)
+      end
+
+      def fatal?
+        meets_threshold?(:fatal)
+      end
+
       private
 
       def meets_threshold?(level)

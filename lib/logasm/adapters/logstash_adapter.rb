@@ -1,10 +1,14 @@
 require 'socket'
 require_relative 'logstash_adapter/formatter'
+require 'forwardable'
 
 class Logasm
   module Adapters
     class LogstashAdapter
+      extend Forwardable
       attr_reader :logger
+
+      def_delegators :@logger, :debug?, :info?, :warn?, :error?, :fatal?
 
       def initialize(level, service, arguments = {})
         host = arguments.fetch(:host)
