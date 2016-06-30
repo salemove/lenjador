@@ -1,7 +1,13 @@
+require 'forwardable'
+
 class Logasm
   module Adapters
     class StdoutAdapter
+      extend Forwardable
+
       attr_reader :logger
+
+      def_delegators :@logger, :debug?, :info?, :warn?, :error?, :fatal?
 
       def initialize(level, *)
         @logger = Logger.new(STDOUT)
