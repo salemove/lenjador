@@ -40,11 +40,9 @@ class Logasm
     log :fatal, *args
   end
 
-  def method_missing(method, *args)
-    if LOG_LEVEL_QUERY_METHODS.include?(method)
+  LOG_LEVEL_QUERY_METHODS.each do |method|
+    define_method(method) do
       @adapters.any? {|adapter| adapter.public_send(method) }
-    else
-      super
     end
   end
 
