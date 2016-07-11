@@ -114,4 +114,10 @@ describe Logasm do
       end
     end
   end
+
+  it 'has the same interface as Ruby logger' do
+    skip "https://salemove.atlassian.net/browse/INF-464"
+    logger = described_class.build('test_service', stdout: {level: 'debug'})
+    expect(logger).to implement_interface(Logger)
+  end
 end
