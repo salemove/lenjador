@@ -4,20 +4,25 @@ require 'json'
 require_relative 'logasm/adapters'
 require_relative 'logasm/utils'
 require_relative 'logasm/null_logger'
+require_relative 'logasm/preprocessors'
 
 LOG_LEVEL_QUERY_METHODS = [:debug?, :info?, :warn?, :error?, :fatal?]
 
 class Logasm
-  def self.build(service_name, loggers_config)
+  def self.build(service_name, loggers_config, preprocessors_config = {})
     loggers_config ||= {stdout: nil}
+    preprocessors = preprocessors_config.map do |type, arguments|
+      Preprocessors.get(type.to_s, arguments || {})
+    end
     adapters = loggers_config.map do |type, arguments|
       Adapters.get(type.to_s, service_name, arguments || {})
     end
-    new(adapters)
+    new(adapters, preprocessors)
   end
 
-  def initialize(adapters)
+  def initialize(adapters, preprocessors)
     @adapters = adapters
+    @preprocessors = preprocessors
   end
 
   def debug(*args)
@@ -53,8 +58,16 @@ class Logasm
   def log(level, *args)
     data = parse_log_data(*args)
 
+    preprocess(data)
+
     @adapters.each do |adapter|
       adapter.log(level, data)
+    end
+  end
+
+  def preprocess(data)
+    @preprocessors.inject(data) do |data_to_process, preprocessor|
+      preprocessor.process(data_to_process)
     end
   end
 
