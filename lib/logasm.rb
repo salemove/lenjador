@@ -57,11 +57,10 @@ class Logasm
 
   def log(level, *args)
     data = parse_log_data(*args)
-
-    preprocess(data)
+    processed_data = preprocess(data)
 
     @adapters.each do |adapter|
-      adapter.log(level, data)
+      adapter.log(level, processed_data)
     end
   end
 
