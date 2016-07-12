@@ -61,3 +61,45 @@ logasm = Logasm.build('myApp', { stdout: nil, logstash: { host: "localhost", por
 ```
 
 When no loggers are specified, it creates a stdout logger by default.
+
+## Preprocessors
+
+Preprocessors allow modification of log messages, prior to sending of the message to the configured logger(s).
+
+### Blacklist
+
+Excludes or masks defined fields of the passed hash object.
+You can specify the name of the field and which action to take on it.
+Nested hashes of any level are preprocessed as well.
+
+Available actions:
+    
+* exclude(`default`) - fully excludes the field and its value from the hash.
+* mask - replaces every character from the original value with `*`. In case of `array`, `hash` or `boolean` value is replaced with one `*`.
+
+#### Configuration
+
+```yaml
+preprocessors:
+  blacklist:
+    fields:
+      - key: password
+      - key: phone
+        action: mask
+```
+
+#### Usage
+
+```ruby
+logger = Logasm.build(application_name, logger_config, preprocessors)
+
+input = {password: 'password', info: {phone: '+12055555555'}}
+
+logger.debug("Received request", input)
+```
+
+Logger output:
+
+```
+Received request {"info":{"phone":"************"}}
+```
