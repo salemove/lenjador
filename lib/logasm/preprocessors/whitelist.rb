@@ -12,7 +12,7 @@ class Logasm
         pointers = (config[:pointers] || []) + DEFAULT_WHITELIST
         @fields_to_include = pointers.inject({}) do |mem, pointer|
           validate_pointer(pointer)
-          mem.merge(pointer => true)
+          mem.merge(decode(pointer) => true)
         end
       end
 
@@ -26,6 +26,12 @@ class Logasm
         if pointer.slice(-1) == '/'
           raise InvalidPointerFormatException.new('Pointer should not contain trailing slash')
         end
+      end
+
+      def decode(pointer)
+        pointer
+          .gsub('~0', '~')
+          .gsub('~1', '/')
       end
 
       def process_data(parent_pointer, data)

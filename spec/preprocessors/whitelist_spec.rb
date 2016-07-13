@@ -127,4 +127,26 @@ describe Logasm::Preprocessors::Whitelist do
       expect(processed_data).to include('field_with_~'=> 'secret')
     end
   end
+
+  context 'when field has slash in the name' do
+    let(:data) {{
+      'field_with_/' => 'secret'
+    }}
+    let(:pointers) { ['/field_with_~1'] }
+
+    it 'includes field' do
+      expect(processed_data).to include('field_with_/'=> 'secret')
+    end
+  end
+
+  context 'when field has tilde in the name' do
+    let(:data) {{
+      'field_with_~' => 'secret'
+    }}
+    let(:pointers) { ['/field_with_~0'] }
+
+    it 'includes field' do
+      expect(processed_data).to include('field_with_~'=> 'secret')
+    end
+  end
 end
