@@ -38,11 +38,36 @@ describe Logasm do
 
       described_class.build('test_service', nil)
     end
+
+    it 'creates preprocessor when preprocessor defined' do
+      expect(described_class).to receive(:new) do |adapters, preprocessors|
+        expect(preprocessors.count).to be(1)
+        expect(preprocessors.first).to be_a(described_class::Preprocessors::Blacklist)
+      end
+
+      preprocessors = {blacklist: {fields: []}}
+      described_class.build('test_service', nil, preprocessors)
+    end
+  end
+
+  context 'when preprocessor defined' do
+    let(:logasm) { described_class.new([adapter], [preprocessor]) }
+    let(:adapter) { double }
+    let(:preprocessor) { double }
+    let(:data) { {data: 'data'} }
+
+    it 'preprocesses data before logging' do
+      expect(preprocessor).to receive(:process).with(data).and_return(data.merge(processed: true)).ordered
+      expect(adapter).to receive(:log).with(:info, data.merge(processed: true)).ordered
+
+      logasm.info(data)
+    end
   end
 
   context 'when parsing log data' do
-    let(:logasm) { described_class.new([adapter]) }
+    let(:logasm) { described_class.new([adapter], preprocessors) }
     let(:adapter) { double }
+    let(:preprocessors) { [] }
 
     it 'parses empty string with nil metadata' do
       expect(adapter).to receive(:log).with(:info, message: '')
