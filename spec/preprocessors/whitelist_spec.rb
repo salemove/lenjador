@@ -74,6 +74,28 @@ describe Logasm::Preprocessors::Whitelist do
     end
   end
 
+  context 'with whitelisted array elements field with wildcard' do
+    let(:data) {{
+      array: [{field: 'data', secret: 'secret'}]
+    }}
+    let(:pointers) { ['/array/~/field'] }
+
+    it 'includes array elements field' do
+      expect(processed_data).to include(array: [{field: 'data', secret: '******'}])
+    end
+  end
+
+  context 'with whitelisted string array elements with wildcard' do
+    let(:data) {{
+      array: ['secret', 'secret']
+    }}
+    let(:pointers) { ['/array/~'] }
+
+    it 'includes array elements' do
+      expect(processed_data).to include(array: ['secret', 'secret'])
+    end
+  end
+
   context 'with whitelisted array element' do
     let(:pointers) { ['/array/0'] }
 
