@@ -66,8 +66,8 @@ class Logasm
 
       def decode(pointer)
         pointer
-          .gsub('~0', '~')
           .gsub('~1', '/')
+          .gsub('~0', '~')
       end
 
       def process_data(parent_pointer, data)
