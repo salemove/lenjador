@@ -74,6 +74,30 @@ describe Logasm::Preprocessors::Whitelist do
     end
   end
 
+  context 'with whitelisted array elements field with wildcard' do
+    let(:data) {{
+      array: [{field: 'data1', secret: 'secret1'}, {field: 'data2', secret: 'secret2'}]
+    }}
+    let(:pointers) { ['/array/~/field'] }
+
+    it 'includes array elements field' do
+      expect(processed_data).to include(
+        array: [{field: 'data1', secret: '*******'}, {field: 'data2', secret: '*******'}]
+      )
+    end
+  end
+
+  context 'with whitelisted string array elements with wildcard' do
+    let(:data) {{
+      array: ['secret', 'secret']
+    }}
+    let(:pointers) { ['/array/~'] }
+
+    it 'includes array elements' do
+      expect(processed_data).to include(array: ['secret', 'secret'])
+    end
+  end
+
   context 'with whitelisted array element' do
     let(:pointers) { ['/array/0'] }
 
@@ -147,6 +171,17 @@ describe Logasm::Preprocessors::Whitelist do
 
     it 'includes field' do
       expect(processed_data).to include('field_with_~'=> 'secret')
+    end
+  end
+  
+  context 'when field has tilde and 1' do
+    let(:data) {{
+      'field_with_~1' => 'secret'
+    }}
+    let(:pointers) { ['/field_with_~01'] }
+
+    it 'includes field' do
+      expect(processed_data).to include('field_with_~1'=> 'secret')
     end
   end
 end

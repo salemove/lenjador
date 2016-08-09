@@ -4,16 +4,24 @@ class Logasm
 
       DEFAULT_WHITELIST = %w(/id /message /correlation_id /queue)
       MASK_SYMBOL = '*'
+      WILDCARD = '~'
 
       class InvalidPointerFormatException < Exception
       end
 
       def initialize(config = {})
         pointers = (config[:pointers] || []) + DEFAULT_WHITELIST
-        @fields_to_include = pointers.inject({}) do |mem, pointer|
-          validate_pointer(pointer)
-          mem.merge(decode(pointer) => true)
+        decoded_pointers = pointers
+          .each(&method(:validate_pointer))
+          .map(&method(:decode))
+        @fields_to_include = decoded_pointers.inject({}) do |mem, pointer|
+          mem.merge(pointer => true)
         end
+        @wildcards = decoded_pointers
+          .select(&method(:has_wildcard?))
+          .inject({}) do |mem, pointer|
+            mem.merge(get_wildcard_roots_of(pointer))
+          end
       end
 
       def process(data)
@@ -21,6 +29,34 @@ class Logasm
       end
 
       private
+
+
+      def has_wildcard?(pointer)
+        pointer.include?("/#{WILDCARD}/") || pointer.end_with?("/#{WILDCARD}")
+      end
+
+      # From a pointer with wildcards builds a hash with roots that contains a wildcard. Hash is used to easily match
+      # find if hash element matches the pointer while processing the log.
+      #
+      # Example:
+      #
+      # Input:
+      #   "/array/~/nested_array/~/fields"
+      #
+      # Output:
+      # {
+      #   "/array/~/nested_array/~" => true,
+      #   "/array/~" => true
+      # }
+      #
+      def get_wildcard_roots_of(pointer)
+        if (index = pointer.rindex("/#{WILDCARD}/"))
+          wildcard_root = pointer.slice(0, index + 2)
+          get_wildcard_roots_of(wildcard_root).merge(wildcard_root => true)
+        else
+          {pointer => true}
+        end
+      end
 
       def validate_pointer(pointer)
         if pointer.slice(-1) == '/'
@@ -30,8 +66,8 @@ class Logasm
 
       def decode(pointer)
         pointer
-          .gsub('~0', '~')
           .gsub('~1', '/')
+          .gsub('~0', '~')
       end
 
       def process_data(parent_pointer, data)
@@ -57,8 +93,14 @@ class Logasm
       end
 
       def process_array(parent_pointer, array)
+        create_child_pointer =
+          if @wildcards["#{parent_pointer}/~"]
+            lambda { |_| "#{parent_pointer}/~" }
+          else
+            lambda { |index| "#{parent_pointer}/#{index}" }
+          end
         array.each_with_index.inject([]) do |mem, (value, index)|
-          pointer = "#{parent_pointer}/#{index}"
+          pointer = create_child_pointer.call(index)
           processed_value = process_data(pointer, value)
           mem + [processed_value]
         end
