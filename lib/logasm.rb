@@ -25,24 +25,24 @@ class Logasm
     @preprocessors = preprocessors
   end
 
-  def debug(*args)
-    log :debug, *args
+  def debug(*args, &block)
+    log :debug, *args, &block
   end
 
-  def info(*args)
-    log :info, *args
+  def info(*args, &block)
+    log :info, *args, &block
   end
 
-  def warn(*args)
-    log :warn, *args
+  def warn(*args, &block)
+    log :warn, *args, &block
   end
 
-  def error(*args)
-    log :error, *args
+  def error(*args, &block)
+    log :error, *args, &block
   end
 
-  def fatal(*args)
-    log :fatal, *args
+  def fatal(*args, &block)
+    log :fatal, *args, &block
   end
 
   LOG_LEVEL_QUERY_METHODS.each do |method|
@@ -53,8 +53,8 @@ class Logasm
 
   private
 
-  def log(level, *args)
-    data = parse_log_data(*args)
+  def log(level, *args, &block)
+    data = parse_log_data(*args, &block)
     processed_data = preprocess(data)
 
     @adapters.each do |adapter|
@@ -68,9 +68,9 @@ class Logasm
     end
   end
 
-  def parse_log_data(message, metadata = {})
+  def parse_log_data(message = nil, metadata = {}, &block)
     return message if message.is_a?(Hash)
 
-    (metadata || {}).merge(message: message)
+    (metadata || {}).merge(message: block ? block.call : message)
   end
 end
