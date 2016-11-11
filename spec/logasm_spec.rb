@@ -98,6 +98,20 @@ describe Logasm do
 
       logasm.info 'test message', test: 'data'
     end
+
+    it 'parses block as a message' do
+      message = 'test message'
+      expect(adapter).to receive(:log).with(:info, message: message)
+
+      logasm.info { message }
+    end
+
+    it 'ignores progname on block syntax' do
+      message = 'test message'
+      expect(adapter).to receive(:log).with(:info, message: message)
+
+      logasm.info('progname') { message }
+    end
   end
 
   context 'log level queries' do
