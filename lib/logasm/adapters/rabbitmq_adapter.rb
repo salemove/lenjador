@@ -12,7 +12,7 @@ class Logasm
     class RabbitmqAdapter
       attr_reader :freddy
 
-      CONFIGURATION_KEYS = [:host, :user, :pass, :port]
+      CONFIGURATION_KEYS = [:host, :hosts, :user, :pass, :port]
 
       def initialize(level, service_name, arguments = {})
         config = arguments.select { |key, value| CONFIGURATION_KEYS.include?(key) }
