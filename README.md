@@ -108,7 +108,7 @@ Received request {"info":{"phone":"************"}}
 
 Masks all the fields except those whitelisted in the configuration using [JSON Pointer](https://tools.ietf.org/html/rfc6901).
 Only simple values(`string`, `number`, `boolean`) can be whitelisted.
-Whitelisting array elements can be done using wildcard symbol `~`.
+Whitelisting array and hash elements can be done using wildcard symbol `~`.
 
 #### Configuration
 
