@@ -7,10 +7,12 @@ describe Logasm::Adapters::RabbitmqAdapter do
       host: 'localhost', user: 'guest', pass: 'guest', port: '5672'
     })
   end
-  let(:freddy) { adapter.freddy }
+  let(:bunny) { double(start: nil, create_channel: channel) }
+  let(:channel) { double(default_exchange: exchange) }
+  let(:exchange) { spy }
 
   before do
-    allow(Freddy).to receive(:build) { FreddyMock.new }
+    allow(Bunny).to receive(:new) { bunny }
   end
 
   describe '#log' do
@@ -20,15 +22,10 @@ describe Logasm::Adapters::RabbitmqAdapter do
       it 'delegates to freddy' do
         adapter.log :info, message: 'test'
 
-        expect(freddy.deliveries.size).to eq(1)
-
-        queue, event = freddy.deliveries[0]
-        expect(queue).to eq('logstash-queue')
-        expect(event[:message]).to eq('test')
-        expect(event[:application]).to eq('test_service')
-        expect(event[:level]).to eq('info')
-        expect(event[:host]).to be_a(String)
-        expect(event[:@timestamp]).to match(/\d{4}-\d{2}-\d{2}T.*/)
+        expect(exchange).to have_received(:publish).with(
+          match(/{"@timestamp":"\d{4}-\d{2}-\d{2}T.*","host":"\w+","message":"test","application":"test_service","level":"info"}/),
+          { content_type: 'application/json', routing_key: 'logstash-queue' }
+        )
       end
     end
 
@@ -36,9 +33,9 @@ describe Logasm::Adapters::RabbitmqAdapter do
       let(:log_level) { 3 }
 
       it 'does not delegate to freddy' do
-        expect(freddy).not_to receive(:deliver)
-
         adapter.log :info, message: 'test', a: 'b'
+
+        expect(exchange).to_not have_received(:publish)
       end
     end
   end
