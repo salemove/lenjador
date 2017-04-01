@@ -1,8 +1,8 @@
 begin
-  require 'freddy'
+  require 'bunny'
 rescue LoadError => e
-  raise unless e.message =~ /freddy/
-  exception = e.exception('To use RabbitMQ adapter for logging, please install freddy!')
+  raise unless e.message =~ /bunny/
+  exception = e.exception('To use RabbitMQ adapter for logging, please install bunny!')
   exception.set_backtrace(e.backtrace)
   raise exception
 end
@@ -10,17 +10,16 @@ end
 class Logasm
   module Adapters
     class RabbitmqAdapter
-      attr_reader :freddy
-
       CONFIGURATION_KEYS = [:host, :hosts, :user, :pass, :port]
+
+      attr_reader :bunny
 
       def initialize(level, service_name, arguments = {})
         config = arguments.select { |key, value| CONFIGURATION_KEYS.include?(key) }
-        logger = NullLogger.new
-        @queue = arguments.fetch(:queue, 'logstash-queue')
         @level = level
         @service_name = service_name
-        @freddy = Freddy.build(logger, config.merge({recover_from_connection_close: true}))
+        @bunny = Bunny.new(config)
+        @queue_name = arguments.fetch(:queue, 'logstash-queue')
       end
 
       def log(level, metadata = {})
@@ -57,8 +56,16 @@ class Logasm
       end
 
       def deliver_message(message)
-        @freddy.deliver @queue, message
+        queue.publish JSON.dump(message)
       rescue Bunny::ConnectionClosedError
+      end
+
+      def queue
+        @queue ||= begin
+          bunny.start
+          channel = bunny.create_channel
+          channel.queue(@queue_name)
+        end
       end
     end
   end
