@@ -56,18 +56,18 @@ describe Logasm::Preprocessors::Blacklist do
     let(:action) { 'mask' }
 
     it 'masks nested field' do
-      expect(processed_data).to include_at_depth({field: '******'}, 1)
+      expect(processed_data).to include_at_depth({field: '*****'}, 1)
     end
 
     it 'masks nested in array field' do
-      expect(processed_data[:array]).to include({field: '******'})
+      expect(processed_data[:array]).to include({field: '*****'})
     end
 
     context 'when field is string' do
       let(:value) { 'secret' }
 
       it 'masks value with asterisks' do
-        expect(processed_data).to include(field: '******')
+        expect(processed_data).to include(field: '*****')
       end
     end
 
@@ -75,31 +75,31 @@ describe Logasm::Preprocessors::Blacklist do
       let(:value) { 42 }
 
       it 'masks number value' do
-        expect(processed_data).to include(field: '**')
+        expect(processed_data).to include(field: '*****')
       end
     end
 
     context 'when field is boolean' do
       let(:value) { true }
 
-      it 'masks value with one asterisk' do
-        expect(processed_data).to include(field: '*')
+      it 'masks value with asterisks' do
+        expect(processed_data).to include(field: '*****')
       end
     end
 
     context 'when field is array' do
       let(:value) { [1,2,3,4] }
 
-      it 'masks value with one asterisk' do
-        expect(processed_data).to include(field: '*')
+      it 'masks value with asterisks' do
+        expect(processed_data).to include(field: '*****')
       end
     end
 
     context 'when field is hash' do
       let(:value) { {data: {}} }
 
-      it 'masks value with one asterisk' do
-        expect(processed_data).to include(field: '*')
+      it 'masks value with asterisks' do
+        expect(processed_data).to include(field: '*****')
       end
     end
 
@@ -108,7 +108,7 @@ describe Logasm::Preprocessors::Blacklist do
       let(:data) { data_with_nested_field({field: 'secret'}, depth) }
 
       it 'masks deeply nested field' do
-        expect(processed_data).to include_at_depth({field: '******'}, depth)
+        expect(processed_data).to include_at_depth({field: '*****'}, depth)
       end
     end
   end

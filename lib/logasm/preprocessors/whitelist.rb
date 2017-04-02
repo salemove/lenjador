@@ -4,6 +4,7 @@ class Logasm
 
       DEFAULT_WHITELIST = %w(/id /message /correlation_id /queue)
       MASK_SYMBOL = '*'
+      MASKED_VALUE = MASK_SYMBOL * 5
       WILDCARD = '~'
 
       class InvalidPointerFormatException < Exception
@@ -110,20 +111,8 @@ class Logasm
         if @fields_to_include[parent_pointer]
           value
         else
-          mask value
+          MASKED_VALUE
         end
-      end
-
-      def mask(value)
-        if value && value.respond_to?(:to_s) && !is_boolean?(value)
-          MASK_SYMBOL * value.to_s.length
-        else
-          MASK_SYMBOL
-        end
-      end
-
-      def is_boolean?(value)
-        value.is_a?(TrueClass) || value.is_a?(FalseClass)
       end
     end
   end
