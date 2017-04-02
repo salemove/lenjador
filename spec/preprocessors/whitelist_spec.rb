@@ -74,6 +74,20 @@ describe Logasm::Preprocessors::Whitelist do
     end
   end
 
+  context 'with whitelisted hash' do
+    it 'includes all whitelisted hash elements' do
+      source = {foo: {bar: 'baz'}}
+      target = {foo: {bar: 'baz'}}
+      expect(process(['/foo/~'], source)).to eq(target)
+    end
+
+    it 'does not include nested elements' do
+      source = {foo: {bar: {baz: 'asd'}}}
+      target = {foo: {bar: {baz: '***'}}}
+      expect(process(['/foo/~'], source)).to eq(target)
+    end
+  end
+
   context 'with whitelisted array elements field with wildcard' do
     let(:data) {{
       array: [{field: 'data1', secret: 'secret1'}, {field: 'data2', secret: 'secret2'}]
@@ -183,5 +197,9 @@ describe Logasm::Preprocessors::Whitelist do
     it 'includes field' do
       expect(processed_data).to include('field_with_~1'=> 'secret')
     end
+  end
+
+  def process(pointers, data)
+    described_class.new(pointers: pointers).process(data)
   end
 end

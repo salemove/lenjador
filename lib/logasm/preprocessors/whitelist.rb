@@ -85,8 +85,14 @@ class Logasm
       end
 
       def process_hash(parent_pointer, hash)
+        create_child_pointer =
+          if @wildcards["#{parent_pointer}/~"]
+            lambda { |_| "#{parent_pointer}/~" }
+          else
+            lambda { |key| "#{parent_pointer}/#{key}" }
+          end
         hash.inject({}) do |mem, (key, value)|
-          pointer = "#{parent_pointer}/#{key}"
+          pointer = create_child_pointer.call(key)
           processed_value = process_data(pointer, value)
           mem.merge(key => processed_value)
         end
