@@ -4,6 +4,7 @@ class Logasm
 
       DEFAULT_ACTION = 'exclude'
       MASK_SYMBOL = '*'
+      MASKED_VALUE = MASK_SYMBOL * 5
 
       class UnsupportedActionException < Exception
       end
@@ -48,19 +49,11 @@ class Logasm
       end
 
       def mask_field(data, key, val)
-        if val.is_a?(Hash) || val.is_a?(Array) || is_boolean?(val)
-          data.merge(key => MASK_SYMBOL)
-        else
-          data.merge(key => MASK_SYMBOL * val.to_s.length)
-        end
+        data.merge(key => MASKED_VALUE)
       end
 
       def exclude_field(data, *)
         data
-      end
-
-      def is_boolean?(val)
-        val.is_a?(TrueClass) || val.is_a?(FalseClass)
       end
     end
   end

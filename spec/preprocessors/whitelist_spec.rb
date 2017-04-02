@@ -16,11 +16,11 @@ describe Logasm::Preprocessors::Whitelist do
 
   it 'masks all non-whitelisted fields' do
     expect(processed_data).to eq({
-      field: '******',
+      field: '*****',
       data: {
-        field: '******'
+        field: '*****'
       },
-      array: [{field: '******'}]
+      array: [{field: '*****'}]
     })
   end
 
@@ -39,9 +39,9 @@ describe Logasm::Preprocessors::Whitelist do
       expect(processed_data).to eq({
         field: 'secret',
         data: {
-          field: '******'
+          field: '*****'
         },
-        array: [{field: '******'}]
+        array: [{field: '*****'}]
       })
     end
   end
@@ -51,11 +51,11 @@ describe Logasm::Preprocessors::Whitelist do
 
     it 'includes nested field' do
       expect(processed_data).to eq({
-        field: '******',
+        field: '*****',
         data: {
           field: 'secret'
         },
-        array: [{field: '******'}]
+        array: [{field: '*****'}]
       })
     end
   end
@@ -65,9 +65,9 @@ describe Logasm::Preprocessors::Whitelist do
 
     it 'includes array element' do
       expect(processed_data).to eq({
-        field: '******',
+        field: '*****',
         data: {
-          field: '******'
+          field: '*****'
         },
         array: [{field: 'secret'}]
       })
@@ -96,7 +96,7 @@ describe Logasm::Preprocessors::Whitelist do
 
     it 'includes array elements field' do
       expect(processed_data).to include(
-        array: [{field: 'data1', secret: '*******'}, {field: 'data2', secret: '*******'}]
+        array: [{field: 'data1', secret: '*****'}, {field: 'data2', secret: '*****'}]
       )
     end
   end
@@ -116,7 +116,7 @@ describe Logasm::Preprocessors::Whitelist do
     let(:pointers) { ['/array/0'] }
 
     it 'masks array element' do
-      expect(processed_data).to include(array: [{field: '******'}])
+      expect(processed_data).to include(array: [{field: '*****'}])
     end
   end
 
@@ -124,7 +124,7 @@ describe Logasm::Preprocessors::Whitelist do
     let(:pointers) { ['/array'] }
 
     it 'masks array' do
-      expect(processed_data).to include(array: [{field: '******'}])
+      expect(processed_data).to include(array: [{field: '*****'}])
     end
   end
 
@@ -132,15 +132,15 @@ describe Logasm::Preprocessors::Whitelist do
     let(:pointers) { ['/data'] }
 
     it 'masks hash' do
-      expect(processed_data).to include(data: {field: '******'})
+      expect(processed_data).to include(data: {field: '*****'})
     end
   end
 
   context 'when boolean present' do
     let(:data) { {bool: true} }
 
-    it 'masks it with single asteriks' do
-      expect(processed_data).to eq(bool: '*')
+    it 'masks it with asteriks' do
+      expect(processed_data).to eq(bool: '*****')
     end
   end
 
@@ -187,7 +187,7 @@ describe Logasm::Preprocessors::Whitelist do
       expect(processed_data).to include('field_with_~'=> 'secret')
     end
   end
-  
+
   context 'when field has tilde and 1' do
     let(:data) {{
       'field_with_~1' => 'secret'
