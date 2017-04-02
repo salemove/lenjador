@@ -3,8 +3,24 @@ class Logasm
     LOG_LEVELS = %w(debug info warn error fatal unknown).freeze
 
     def self.get(type, service_name, arguments)
-      require_relative "adapters/#{type.to_s}_adapter"
-      adapter = const_get(Inflecto.camelize(type.to_s) + 'Adapter')
+      adapter =
+        if type == 'rabbitmq'
+          require_relative 'adapters/rabbitmq_adapter'
+          RabbitmqAdapter
+        elsif type == 'logstash'
+          require_relative 'adapters/logstash_adapter'
+          LogstashAdapter
+        elsif type == 'stdout'
+          if arguments.fetch(:json, false)
+            require_relative 'adapters/stdout_json_adapter'
+            StdoutJsonAdapter
+          else
+            require_relative 'adapters/stdout_adapter'
+            StdoutAdapter
+          end
+        else
+          raise "Unsupported logger: #{type}"
+        end
       level = LOG_LEVELS.index(arguments.fetch(:level, 'debug'))
       adapter.new(level, service_name, arguments)
     end

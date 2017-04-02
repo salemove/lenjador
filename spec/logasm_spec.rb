@@ -2,13 +2,22 @@ require 'spec_helper'
 
 describe Logasm do
   describe '.build' do
-    it 'creates file logger' do
+    it 'creates stdout logger' do
       expect(described_class).to receive(:new) do |adapters|
         expect(adapters.count).to be(1)
         expect(adapters.first).to be_a(described_class::Adapters::StdoutAdapter)
       end
 
       described_class.build('test_service', stdout: nil)
+    end
+
+    it 'creates stdout json logger' do
+      expect(described_class).to receive(:new) do |adapters|
+        expect(adapters.count).to be(1)
+        expect(adapters.first).to be_a(described_class::Adapters::StdoutJsonAdapter)
+      end
+
+      described_class.build('test_service', stdout: {json: true})
     end
 
     it 'creates logstash logger' do
