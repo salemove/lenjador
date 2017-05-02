@@ -1,4 +1,5 @@
 require 'socket'
+require 'time'
 
 class Logasm
   module Utils
