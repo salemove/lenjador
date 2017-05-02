@@ -83,7 +83,7 @@ describe Logasm::Preprocessors::Whitelist do
 
     it 'does not include nested elements' do
       source = {foo: {bar: {baz: 'asd'}}}
-      target = {foo: {bar: {baz: '***'}}}
+      target = {foo: {bar: {baz: '*****'}}}
       expect(process(['/foo/~'], source)).to eq(target)
     end
   end
