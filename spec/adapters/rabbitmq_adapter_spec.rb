@@ -19,11 +19,11 @@ describe Logasm::Adapters::RabbitmqAdapter do
     context 'when logging a message' do
       let(:log_level) { 0 }
 
-      it 'delegates to freddy' do
+      it 'delegates to bunny' do
         adapter.log :info, message: 'test'
 
         expect(exchange).to have_received(:publish).with(
-          match(/{"@timestamp":"\d{4}-\d{2}-\d{2}T.*","host":"\w+","message":"test","application":"test_service","level":"info"}/),
+          match(/{"@timestamp":"\d{4}-\d{2}-\d{2}T.*","host":".+","message":"test","application":"test_service","level":"info"}/),
           { content_type: 'application/json', routing_key: 'logstash-queue' }
         )
       end
@@ -32,7 +32,7 @@ describe Logasm::Adapters::RabbitmqAdapter do
     context 'when log level is lower than threshold' do
       let(:log_level) { 3 }
 
-      it 'does not delegate to freddy' do
+      it 'does not delegate to bunny' do
         adapter.log :info, message: 'test', a: 'b'
 
         expect(exchange).to_not have_received(:publish)
