@@ -112,6 +112,18 @@ describe Logasm::Preprocessors::Whitelist do
     end
   end
 
+  context 'with whitelisted string array elements in an array with wildcard' do
+    let(:data) {{
+      nested: [{array: ['secret', 'secret']}]
+    }}
+    let(:pointers) { ['/nested/~/array/~'] }
+
+    it 'includes array elements' do
+      expect(processed_data).to include(nested: [{array: ['secret', 'secret']}])
+    end
+  end
+
+
   context 'with whitelisted array element' do
     let(:pointers) { ['/array/0'] }
 
