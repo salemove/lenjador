@@ -53,7 +53,8 @@ class Logasm
       def get_wildcard_roots_of(pointer)
         if (index = pointer.rindex("/#{WILDCARD}/"))
           wildcard_root = pointer.slice(0, index + 2)
-          get_wildcard_roots_of(wildcard_root).merge(wildcard_root => true)
+          wildcard_path = pointer.end_with?(WILDCARD) ? pointer : wildcard_root
+          get_wildcard_roots_of(wildcard_root).merge(wildcard_path => true)
         else
           {pointer => true}
         end
