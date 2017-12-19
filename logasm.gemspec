@@ -17,8 +17,10 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_dependency 'inflecto'
+  gem.add_dependency 'lru_redux'
 
   gem.add_development_dependency "bundler", "~> 1.3"
   gem.add_development_dependency "rake"
   gem.add_development_dependency "bunny"
+  gem.add_development_dependency "benchmark-ips"
 end
