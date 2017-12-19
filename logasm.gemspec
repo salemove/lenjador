@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |gem|
   gem.name          = "logasm"
-  gem.version       = '0.8.1'
+  gem.version       = '0.9.0'
   gem.authors       = ["Salemove"]
   gem.email         = ["support@salemove.com"]
   gem.description   = %q{It's logasmic}
@@ -17,8 +17,10 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_dependency 'inflecto'
+  gem.add_dependency 'lru_redux'
 
   gem.add_development_dependency "bundler", "~> 1.3"
   gem.add_development_dependency "rake"
   gem.add_development_dependency "bunny"
+  gem.add_development_dependency "benchmark-ips"
 end
