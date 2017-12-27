@@ -73,9 +73,10 @@ You can specify the name of the field and which action to take on it.
 Nested hashes of any level are preprocessed as well.
 
 Available actions:
-    
-* exclude(`default`) - fully excludes the field and its value from the hash.
-* mask - replaces every character from the original value with `*`. In case of `array`, `hash` or `boolean` value is replaced with one `*`.
+
+* `prune` (default) - fully excludes the field and its value from the hash.
+* `mask` - replaces every character from the original value with `*`. 
+  In case of `array`, `hash` or `boolean` value is replaced with one `*`.
 
 #### Configuration
 
@@ -85,7 +86,7 @@ preprocessors:
     fields:
       - key: password
       - key: phone
-        action: mask
+    action: mask
 ```
 
 #### Usage
@@ -106,9 +107,15 @@ Received request {"info":{"phone":"************"}}
 
 ### Whitelist
 
-Masks all the fields except those whitelisted in the configuration using [JSON Pointer](https://tools.ietf.org/html/rfc6901).
+Prunes or masks all the fields except those whitelisted in the configuration using [JSON Pointer](https://tools.ietf.org/html/rfc6901).
 Only simple values(`string`, `number`, `boolean`) can be whitelisted.
 Whitelisting array and hash elements can be done using wildcard symbol `~`.
+
+Available actions:
+
+* `mask` (default) - replaces every character from the original value with `*`. 
+  In case of `array`, `hash` or `boolean` value is replaced with one `*`.
+* `prune` - fully excludes the field and its value from the hash.
 
 #### Configuration
 
@@ -116,6 +123,7 @@ Whitelisting array and hash elements can be done using wildcard symbol `~`.
 preprocessors:
   whitelist:
     pointers: ['/info/phone', '/addresses/~/host']
+  action: prune
 ```
 
 #### Usage

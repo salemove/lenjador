@@ -2,7 +2,7 @@ class Logasm
   module Preprocessors
     class Blacklist
 
-      DEFAULT_ACTION = 'exclude'
+      DEFAULT_ACTION = 'prune'
       MASK_SYMBOL = '*'
       MASKED_VALUE = MASK_SYMBOL * 5
 
@@ -52,9 +52,10 @@ class Logasm
         data.merge(key => MASKED_VALUE)
       end
 
-      def exclude_field(data, *)
+      def prune_field(data, *)
         data
       end
+      alias_method :exclude_field, :prune_field
     end
   end
 end
