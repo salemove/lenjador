@@ -1,4 +1,6 @@
 require 'logasm/preprocessors/json_pointer_trie'
+require 'logasm/preprocessors/strategies/mask'
+require 'logasm/preprocessors/strategies/prune'
 
 class Logasm
   module Preprocessors
@@ -7,21 +9,25 @@ class Logasm
       MASK_SYMBOL = '*'.freeze
       MASKED_VALUE = MASK_SYMBOL * 5
 
+      PRUNE_ACTION_NAMES = %w[prune exclude].freeze
+
+      # A special constant to indicate that a value should be pruned from the output
+
       class InvalidPointerFormatException < Exception
       end
 
       def initialize(config = {})
-        pointers = (config[:pointers] || []) + DEFAULT_WHITELIST
+        trie = build_trie(config)
 
-        @trie = pointers.reduce(JSONPointerTrie.new(config)) do |trie, pointer|
-          validate_pointer(pointer)
-
-          trie.insert(decode(pointer))
-        end
+        @strategy = if PRUNE_ACTION_NAMES.include?(config[:action].to_s)
+                      Strategies::Prune.new(trie)
+                    else
+                      Strategies::Mask.new(trie)
+                    end
       end
 
       def process(data)
-        process_data('', data)
+        @strategy.process(data)
       end
 
       private
@@ -38,31 +44,13 @@ class Logasm
           .gsub('~0', '~')
       end
 
-      def process_data(parent_pointer, data)
-        return MASKED_VALUE unless @trie.include?(parent_pointer)
+      def build_trie(config)
+        pointers = (config[:pointers] || []) + DEFAULT_WHITELIST
 
-        case data
-        when Hash
-          process_hash(parent_pointer, data)
+        pointers.reduce(JSONPointerTrie.new(config)) do |trie, pointer|
+          validate_pointer(pointer)
 
-        when Array
-          process_array(parent_pointer, data)
-
-        else
-          data
-        end
-      end
-
-      def process_hash(parent_pointer, hash)
-        hash.each_with_object({}) do |(key, value), result|
-          processed = process_data("#{parent_pointer}/#{key}", value)
-          result[key] = processed
-        end
-      end
-
-      def process_array(parent_pointer, array)
-        array.each_with_index.map do |value, index|
-          process_data("#{parent_pointer}/#{index}", value)
+          trie.insert(decode(pointer))
         end
       end
     end
