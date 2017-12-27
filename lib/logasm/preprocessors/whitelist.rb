@@ -11,8 +11,6 @@ class Logasm
 
       PRUNE_ACTION_NAMES = %w[prune exclude].freeze
 
-      # A special constant to indicate that a value should be pruned from the output
-
       class InvalidPointerFormatException < Exception
       end
 
