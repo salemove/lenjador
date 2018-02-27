@@ -20,26 +20,7 @@ describe Logasm do
       described_class.build('test_service', stdout: {json: true})
     end
 
-    it 'creates logstash logger' do
-      expect(described_class).to receive(:new) do |adapters|
-        expect(adapters.count).to be(1)
-        expect(adapters.first).to be_a(described_class::Adapters::LogstashAdapter)
-      end
-
-      described_class.build('test_service', logstash: {host: 'localhost', port: 5228})
-    end
-
-    it 'creates multiple loggers' do
-      expect(described_class).to receive(:new) do |adapters|
-        expect(adapters.count).to be(2)
-        expect(adapters.first).to be_a(described_class::Adapters::StdoutAdapter)
-        expect(adapters.last).to be_a(described_class::Adapters::LogstashAdapter)
-      end
-
-      described_class.build('test_service', stdout: nil, logstash: {host: 'localhost', port: 5228})
-    end
-
-    it 'creates file logger when no loggers are specified' do
+    it 'creates stdout logger when no loggers are specified' do
       expect(described_class).to receive(:new) do |adapters|
         expect(adapters.count).to be(1)
         expect(adapters.first).to be_a(described_class::Adapters::StdoutAdapter)
@@ -124,14 +105,9 @@ describe Logasm do
   end
 
   context 'log level queries' do
-    context 'when one adapter has debug level' do
+    context 'when adapter has debug level' do
       let(:logger) do
-        described_class.build(
-          'test_service',
-          stdout: {level: 'debug'},
-          logstash: {level: 'info', host: '127.0.0.1', port: 5228 },
-          rabbitmq: {level: 'fatal'},
-        )
+        described_class.build('test_service', stdout: {level: 'debug'})
       end
 
       it 'responds true to debug? and higher levels' do
@@ -143,14 +119,9 @@ describe Logasm do
       end
     end
 
-    context 'when one adapter has info level' do
+    context 'when adapter has info level' do
       let(:logger) do
-        described_class.build(
-          'test_service',
-          rabbitmq: {level: 'info'},
-          stdout: {level: 'warn'},
-          logstash: {level: 'warn', host: '127.0.0.1', port: 5228 },
-        )
+        described_class.build('test_service', stdout: {level: 'info'})
       end
 
       it 'responds true to info? and higher levels' do

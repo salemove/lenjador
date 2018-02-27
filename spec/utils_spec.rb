@@ -34,10 +34,6 @@ describe Logasm::Utils do
       expect(event[:@timestamp]).to eq('2015-10-11T23:10:21.123Z')
     end
 
-    it 'includes the host' do
-      expect(event[:host]).to be_a(String)
-    end
-
     context 'when @timestamp provided' do
       let(:metadata) { {message: 'test', :@timestamp => 'a timestamp'} }
 

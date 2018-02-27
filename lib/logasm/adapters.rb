@@ -4,13 +4,7 @@ class Logasm
 
     def self.get(type, service_name, arguments)
       adapter =
-        if type == 'rabbitmq'
-          require_relative 'adapters/rabbitmq_adapter'
-          RabbitmqAdapter
-        elsif type == 'logstash'
-          require_relative 'adapters/logstash_adapter'
-          LogstashAdapter
-        elsif type == 'stdout'
+        if type == 'stdout'
           if arguments.fetch(:json, false)
             require_relative 'adapters/stdout_json_adapter'
             StdoutJsonAdapter
