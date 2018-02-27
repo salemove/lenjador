@@ -4,10 +4,7 @@ class Logasm
 
     def self.get(type, service_name, arguments)
       adapter =
-        if type == 'rabbitmq'
-          require_relative 'adapters/rabbitmq_adapter'
-          RabbitmqAdapter
-        elsif type == 'logstash'
+        if type == 'logstash'
           require_relative 'adapters/logstash_adapter'
           LogstashAdapter
         elsif type == 'stdout'

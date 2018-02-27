@@ -129,8 +129,7 @@ describe Logasm do
         described_class.build(
           'test_service',
           stdout: {level: 'debug'},
-          logstash: {level: 'info', host: '127.0.0.1', port: 5228 },
-          rabbitmq: {level: 'fatal'},
+          logstash: {level: 'info', host: '127.0.0.1', port: 5228 }
         )
       end
 
@@ -147,9 +146,8 @@ describe Logasm do
       let(:logger) do
         described_class.build(
           'test_service',
-          rabbitmq: {level: 'info'},
-          stdout: {level: 'warn'},
-          logstash: {level: 'warn', host: '127.0.0.1', port: 5228 },
+          stdout: {level: 'info'},
+          logstash: {level: 'warn', host: '127.0.0.1', port: 5228 }
         )
       end
 
