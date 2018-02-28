@@ -14,10 +14,11 @@ describe Logasm::Adapters::StdoutJsonAdapter do
       let(:event) { {a: 'b', x: 'y'} }
       let(:serialized_event) { Oj.dump(event, mode: :compat, time_format: :ruby) }
       let(:service_name) { 'my-service' }
+      let(:application_name) { 'my_service' }
 
       before do
         allow(Logasm::Utils).to receive(:build_event)
-          .with(metadata, info_level, service_name)
+          .with(metadata, info_level, application_name)
           .and_return(event)
       end
 

@@ -11,11 +11,11 @@ class Logasm
     # @param [String] service_name
     #
     # @return [Hash]
-    def self.build_event(metadata, level, service_name)
+    def self.build_event(metadata, level, application_name)
       overwritable_params
         .merge(serialize_time_objects!(metadata.dup))
         .merge(
-          application: application_name(service_name),
+          application: application_name,
           level: level.to_s.downcase
         )
     end
