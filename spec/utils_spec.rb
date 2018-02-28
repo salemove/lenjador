@@ -5,7 +5,7 @@ describe Logasm::Utils do
     subject(:event) { described_class.build_event(metadata, level, application_name) }
 
     let(:application_name) { 'test_service' }
-    let(:level)  { 'INFO' }
+    let(:level)  { :info }
     let(:metadata) { {x: 'y'} }
 
     before do
@@ -16,7 +16,7 @@ describe Logasm::Utils do
       expect(event[:application]).to eq(application_name)
     end
 
-    it 'includes level as a lower case string' do
+    it 'includes log level' do
       expect(event[:level]).to eq('info')
     end
 

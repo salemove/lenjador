@@ -16,7 +16,7 @@ class Logasm
         .merge(serialize_time_objects!(metadata.dup))
         .merge(
           application: application_name,
-          level: level.to_s.downcase
+          level: level.to_s
         )
     end
 
