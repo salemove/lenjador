@@ -11,12 +11,12 @@ class Logasm
     # @param [String] service_name
     #
     # @return [Hash]
-    def self.build_event(metadata, level, service_name)
+    def self.build_event(metadata, level, application_name)
       overwritable_params
-        .merge(serialize_time_objects(metadata))
+        .merge(serialize_time_objects!(metadata.dup))
         .merge(
-          application: application_name(service_name),
-          level: level.to_s.downcase
+          application: application_name,
+          level: level.to_s
         )
     end
 
@@ -29,7 +29,7 @@ class Logasm
     #
     # @return [String]
     def self.application_name(service_name)
-      Inflecto.underscore(service_name)
+      underscore(service_name)
     end
 
     def self.overwritable_params
@@ -38,18 +38,30 @@ class Logasm
       }
     end
 
-    def self.serialize_time_objects(object)
+    def self.serialize_time_objects!(object)
       if object.is_a?(Hash)
-        object.reduce({}) do |hash, (key, value)|
-          hash.merge(key => serialize_time_objects(value))
+        object.each do |key, value|
+          object[key] = serialize_time_objects!(value)
         end
       elsif object.is_a?(Array)
-        object.map(&method(:serialize_time_objects))
+        object.each_index do |index|
+          object[index] = serialize_time_objects!(object[index])
+        end
       elsif object.is_a?(Time) || object.is_a?(Date)
         object.iso8601
       else
         object
       end
+    end
+
+    def self.underscore(input)
+      word = input.to_s.dup
+      word.gsub!(/::/, '/')
+      word.gsub!(/([A-Z]+)([A-Z][a-z])/,'\1_\2')
+      word.gsub!(/([a-z\d])([A-Z])/,'\1_\2')
+      word.tr!("-", "_")
+      word.downcase!
+      word
     end
 
     private_class_method :overwritable_params

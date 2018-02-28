@@ -1,4 +1,3 @@
-require 'inflecto'
 require 'logger'
 require 'oj'
 require_relative 'logasm/adapters'

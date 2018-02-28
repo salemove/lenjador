@@ -4,11 +4,12 @@ class Logasm
       def initialize(level, service_name, *)
         @level = level
         @service_name = service_name
+        @application_name = Utils.application_name(service_name)
       end
 
       def log(level, metadata = {})
         if meets_threshold?(level)
-          message = Utils.build_event(metadata, level, @service_name)
+          message = Utils.build_event(metadata, level, @application_name)
           STDOUT.puts(Oj.dump(message, mode: :compat, time_format: :ruby))
         end
       end
