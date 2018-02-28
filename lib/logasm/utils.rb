@@ -29,7 +29,7 @@ class Logasm
     #
     # @return [String]
     def self.application_name(service_name)
-      Inflecto.underscore(service_name)
+      underscore(service_name)
     end
 
     def self.overwritable_params
@@ -50,6 +50,16 @@ class Logasm
       else
         object
       end
+    end
+
+    def self.underscore(input)
+      word = input.to_s.dup
+      word.gsub!(/::/, '/')
+      word.gsub!(/([A-Z]+)([A-Z][a-z])/,'\1_\2')
+      word.gsub!(/([a-z\d])([A-Z])/,'\1_\2')
+      word.tr!("-", "_")
+      word.downcase!
+      word
     end
 
     private_class_method :overwritable_params
