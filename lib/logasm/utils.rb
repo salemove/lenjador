@@ -13,7 +13,7 @@ class Logasm
     # @return [Hash]
     def self.build_event(metadata, level, service_name)
       overwritable_params
-        .merge(serialize_time_objects(metadata))
+        .merge(serialize_time_objects!(metadata.dup))
         .merge(
           application: application_name(service_name),
           level: level.to_s.downcase
@@ -38,13 +38,15 @@ class Logasm
       }
     end
 
-    def self.serialize_time_objects(object)
+    def self.serialize_time_objects!(object)
       if object.is_a?(Hash)
-        object.reduce({}) do |hash, (key, value)|
-          hash.merge(key => serialize_time_objects(value))
+        object.each do |key, value|
+          object[key] = serialize_time_objects!(value)
         end
       elsif object.is_a?(Array)
-        object.map(&method(:serialize_time_objects))
+        object.each_index do |index|
+          object[index] = serialize_time_objects!(object[index])
+        end
       elsif object.is_a?(Time) || object.is_a?(Date)
         object.iso8601
       else
