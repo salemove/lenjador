@@ -12,12 +12,12 @@ describe Logasm::Adapters::StdoutJsonAdapter do
       let(:adapter) { described_class.new(debug_level_code, service_name) }
       let(:metadata) { {x: 'y'} }
       let(:event) { {a: 'b', x: 'y'} }
-      let(:serialized_event) { Oj.dump(event, mode: :compat, time_format: :ruby) }
+      let(:serialized_event) { Oj.dump(event, mode: :compat, time_format: :xmlschema, second_precision: 3) }
       let(:service_name) { 'my-service' }
       let(:application_name) { 'my_service' }
 
       before do
-        allow(Logasm::Utils).to receive(:build_event)
+        allow(Logasm::Utils).to receive(:build_json_event)
           .with(metadata, info_level, application_name)
           .and_return(event)
       end
