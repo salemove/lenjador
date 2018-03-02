@@ -2,8 +2,6 @@ require 'time'
 
 class Logasm
   module Utils
-    DECIMAL_FRACTION_OF_SECOND = 3
-
     # Build logstash json compatible event
     #
     # @param [Hash] metadata
