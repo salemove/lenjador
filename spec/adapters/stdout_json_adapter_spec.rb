@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'json'
 require_relative '../../lib/logasm/adapters/stdout_json_adapter'
 
 describe Logasm::Adapters::StdoutJsonAdapter do
@@ -12,7 +13,7 @@ describe Logasm::Adapters::StdoutJsonAdapter do
       let(:adapter) { described_class.new(debug_level_code, service_name) }
       let(:metadata) { {x: 'y'} }
       let(:event) { {a: 'b', x: 'y'} }
-      let(:serialized_event) { Oj.dump(event, mode: :compat, time_format: :ruby) }
+      let(:serialized_event) { JSON.dump(event) }
       let(:service_name) { 'my-service' }
       let(:application_name) { 'my_service' }
 

@@ -1,5 +1,4 @@
 require 'logger'
-require 'oj'
 require_relative 'logasm/adapters'
 require_relative 'logasm/utils'
 require_relative 'logasm/null_logger'

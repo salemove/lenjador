@@ -17,7 +17,12 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_dependency 'lru_redux'
-  gem.add_dependency 'oj'
+
+  if RUBY_PLATFORM =~ /java/
+    gem.add_dependency 'jrjackson'
+  else
+    gem.add_dependency 'oj'
+  end
 
   gem.add_development_dependency "bundler", "~> 1.3"
   gem.add_development_dependency "rake"
