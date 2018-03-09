@@ -19,7 +19,7 @@ class Logasm
         data = metadata.select { |key, value| key != :message }
         log_data = [
           message,
-          data.empty? ? nil : Oj.dump(data, mode: :compat, time_format: :ruby)
+          data.empty? ? nil : Utils.generate_json(data)
         ].compact.join(' ')
 
         @logger.public_send level, log_data

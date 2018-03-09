@@ -1,6 +1,12 @@
 require 'spec_helper'
 
 describe Logasm::Utils do
+  let(:now) { Time.utc(2015, 10, 11, 23, 10, 21, 123456) }
+
+  before do
+    allow(Time).to receive(:now) { now }
+  end
+
   describe '.build_event' do
     subject(:event) { described_class.build_event(metadata, level, application_name) }
 
@@ -8,16 +14,12 @@ describe Logasm::Utils do
     let(:level)  { :info }
     let(:metadata) { {x: 'y'} }
 
-    before do
-      allow(Time).to receive(:now) { Time.utc(2015, 10, 11, 23, 10, 21, 123456) }
-    end
-
     it 'includes it in the event as application' do
       expect(event[:application]).to eq(application_name)
     end
 
     it 'includes log level' do
-      expect(event[:level]).to eq('info')
+      expect(event[:level]).to eq(:info)
     end
 
     it 'includes timestamp' do
@@ -41,13 +43,42 @@ describe Logasm::Utils do
         expect(subject[:host]).to eq('xyz')
       end
     end
+  end
 
-    context 'when time object in metadata' do
-      let(:metadata) { {time: Time.utc(2016, 1, 5, 10, 38)} }
+  describe '.serialize_time_objects!' do
+    let(:object) do
+      {
+        time: Time.now,
+        hash: {
+          time: Time.now
+        },
+        array: [
+          Time.now,
+          {
+            time: Time.now
+          }
+        ]
+      }
+    end
 
-      it 'serializes as iso8601 format' do
-        expect(subject[:time]).to eq("2016-01-05T10:38:00Z")
-      end
+    let(:serialized_time) { now.iso8601 }
+
+    it 'recursively serializes time objects to iso8601' do
+      o = object.dup
+      described_class.serialize_time_objects!(o)
+
+      expect(o).to eq(
+        time: serialized_time,
+        hash: {
+          time: serialized_time
+        },
+        array: [
+          serialized_time,
+          {
+            time: serialized_time
+          }
+        ]
+      )
     end
   end
 end

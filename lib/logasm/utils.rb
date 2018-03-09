@@ -13,10 +13,10 @@ class Logasm
     # @return [Hash]
     def self.build_event(metadata, level, application_name)
       overwritable_params
-        .merge(serialize_time_objects!(metadata.dup))
+        .merge(metadata)
         .merge(
           application: application_name,
-          level: level.to_s
+          level: level
         )
     end
 
@@ -51,6 +51,28 @@ class Logasm
         object.iso8601
       else
         object
+      end
+    end
+
+    if RUBY_PLATFORM =~ /java/
+      require 'jrjackson'
+
+      DUMP_OPTIONS = {
+        timezone: 'utc',
+        date_format: "YYYY-MM-dd'T'HH:mm:ss.SSSX"
+      }.freeze
+
+      def self.generate_json(obj)
+        JrJackson::Json.dump(obj, DUMP_OPTIONS)
+      end
+    else
+      require 'oj'
+      DUMP_OPTIONS = { mode: :compat, time_format: :ruby }.freeze
+
+      def self.generate_json(obj)
+        serialize_time_objects!(obj)
+
+        Oj.dump(obj, DUMP_OPTIONS)
       end
     end
 

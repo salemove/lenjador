@@ -10,7 +10,7 @@ class Logasm
       def log(level, metadata = {})
         if meets_threshold?(level)
           message = Utils.build_event(metadata, level, @application_name)
-          STDOUT.puts(Oj.dump(message, mode: :compat, time_format: :ruby))
+          STDOUT.puts(Utils.generate_json(message))
         end
       end
 
