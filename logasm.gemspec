@@ -3,7 +3,12 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |gem|
-  gem.name          = "logasm"
+  if RUBY_PLATFORM =~ /java/
+    gem.name = 'logasm-jruby'
+  else
+    gem.name = 'logasm'
+  end
+
   gem.version       = '1.1.0'
   gem.authors       = ["Salemove"]
   gem.email         = ["support@salemove.com"]
