@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
     gem.name = 'logasm'
   end
 
-  gem.version       = '1.1.0'
+  gem.version       = '1.2.0'
   gem.authors       = ["Salemove"]
   gem.email         = ["support@salemove.com"]
   gem.description   = %q{It's logasmic}
