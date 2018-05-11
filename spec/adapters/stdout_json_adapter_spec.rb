@@ -8,6 +8,19 @@ describe Logasm::Adapters::StdoutJsonAdapter do
   let(:info_level_code) { 1 }
   let(:info_level) { Logasm::Adapters::LOG_LEVELS[info_level_code] }
 
+  let(:stdout) { StringIO.new }
+
+  around do |example|
+    old_stdout = $stdout
+    $stdout = stdout
+
+    begin
+      example.call
+    ensure
+      $stdout = old_stdout
+    end
+  end
+
   describe '#log' do
     context 'when below threshold' do
       let(:adapter) { described_class.new(debug_level_code, service_name) }
@@ -23,9 +36,9 @@ describe Logasm::Adapters::StdoutJsonAdapter do
           .and_return(event)
       end
 
-      it 'sends serialized event to STDOUT' do
-        expect(STDOUT).to receive(:puts).with(serialized_event)
+      it 'sends serialized event to $stdout' do
         adapter.log(info_level, metadata)
+        expect(output).to eq serialized_event + "\n"
       end
     end
 
@@ -35,9 +48,15 @@ describe Logasm::Adapters::StdoutJsonAdapter do
       let(:service_name) { 'my-service' }
 
       it 'does not log the event' do
-        expect(STDOUT).to_not receive(:puts)
         adapter.log(debug_level, metadata)
+        expect(output).to be_empty
       end
     end
+  end
+
+  private
+
+  def output
+    stdout.string
   end
 end
