@@ -1,8 +1,8 @@
-require 'logasm/preprocessors/json_pointer_trie'
-require 'logasm/preprocessors/strategies/mask'
-require 'logasm/preprocessors/strategies/prune'
+require 'lenjador/preprocessors/json_pointer_trie'
+require 'lenjador/preprocessors/strategies/mask'
+require 'lenjador/preprocessors/strategies/prune'
 
-class Logasm
+class Lenjador
   module Preprocessors
     class Whitelist
       DEFAULT_WHITELIST = %w[/id /message /correlation_id /queue].freeze

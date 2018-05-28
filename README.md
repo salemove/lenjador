@@ -1,12 +1,12 @@
-Logasm
+Lenjador
 ================
 
 ## Usage
 
-### Creating a new Logasm logger in Ruby
+### Creating a new Lenjador logger in Ruby
 
 ```ruby
-Logasm.build(application_name, logger_config)
+Lenjador.build(application_name, logger_config)
 ```
 
 <b>logger_config</b> is a hash with logger types and their configuration.
@@ -33,9 +33,9 @@ For example level: 'warn' will log everything with warn and above.
 Creating a new stdout logger
 
 ```ruby
-require 'logasm'
+require 'lenjador'
 
-logasm = Logasm.build('myApp', stdout: nil)
+lenjador = Lenjador.build('myApp', stdout: nil)
 ```
 
 When no loggers are specified, it creates a stdout logger by default.
@@ -70,7 +70,7 @@ preprocessors:
 #### Usage
 
 ```ruby
-logger = Logasm.build(application_name, logger_config, preprocessors)
+logger = Lenjador.build(application_name, logger_config, preprocessors)
 
 input = {password: 'password', info: {phone: '+12055555555'}}
 
@@ -107,7 +107,7 @@ preprocessors:
 #### Usage
 
 ```ruby
-logger = Logasm.build(application_name, logger_config, preprocessors)
+logger = Lenjador.build(application_name, logger_config, preprocessors)
 
 input = {password: 'password', info: {phone: '+12055555555'}, addresses: [{host: 'example.com', path: 'info'}]}
 

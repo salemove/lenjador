@@ -1,7 +1,7 @@
 require 'spec_helper'
-require 'logasm/preprocessors/json_pointer_trie'
+require 'lenjador/preprocessors/json_pointer_trie'
 
-RSpec.describe Logasm::Preprocessors::JSONPointerTrie do
+RSpec.describe Lenjador::Preprocessors::JSONPointerTrie do
   let(:trie) { described_class.new }
 
   describe '#includes?' do

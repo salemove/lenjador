@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Logasm do
+describe Lenjador do
   describe '.build' do
     it 'creates stdout logger' do
       expect(described_class).to receive(:new) do |adapters|
@@ -41,7 +41,7 @@ describe Logasm do
   end
 
   context 'when preprocessor defined' do
-    let(:logasm) { described_class.new([adapter], [preprocessor]) }
+    let(:lenjador) { described_class.new([adapter], [preprocessor]) }
     let(:adapter) { double }
     let(:preprocessor) { double }
     let(:data) { {data: 'data'} }
@@ -50,57 +50,57 @@ describe Logasm do
       expect(preprocessor).to receive(:process).with(data).and_return(data.merge(processed: true)).ordered
       expect(adapter).to receive(:log).with(:info, data.merge(processed: true)).ordered
 
-      logasm.info(data)
+      lenjador.info(data)
     end
   end
 
   context 'when parsing log data' do
-    let(:logasm) { described_class.new([adapter], preprocessors) }
+    let(:lenjador) { described_class.new([adapter], preprocessors) }
     let(:adapter) { double }
     let(:preprocessors) { [] }
 
     it 'parses empty string with nil metadata' do
       expect(adapter).to receive(:log).with(:info, message: '')
 
-      logasm.info('', nil)
+      lenjador.info('', nil)
     end
 
     it 'parses nil as metadata' do
       expect(adapter).to receive(:log).with(:info, message: nil)
 
-      logasm.info(nil)
+      lenjador.info(nil)
     end
 
     it 'parses only message' do
       expect(adapter).to receive(:log).with(:info, message: 'test message')
 
-      logasm.info 'test message'
+      lenjador.info 'test message'
     end
 
     it 'parses only metadata' do
       expect(adapter).to receive(:log).with(:info, test: 'data')
 
-      logasm.info test: 'data'
+      lenjador.info test: 'data'
     end
 
     it 'parses message and metadata' do
       expect(adapter).to receive(:log).with(:info, message: 'test message', test: 'data')
 
-      logasm.info 'test message', test: 'data'
+      lenjador.info 'test message', test: 'data'
     end
 
     it 'parses block as a message' do
       message = 'test message'
       expect(adapter).to receive(:log).with(:info, message: message)
 
-      logasm.info { message }
+      lenjador.info { message }
     end
 
     it 'ignores progname on block syntax' do
       message = 'test message'
       expect(adapter).to receive(:log).with(:info, message: message)
 
-      logasm.info('progname') { message }
+      lenjador.info('progname') { message }
     end
   end
 

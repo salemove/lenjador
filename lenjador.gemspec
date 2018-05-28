@@ -4,15 +4,15 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |gem|
   if RUBY_PLATFORM =~ /java/
-    gem.name = 'logasm-jruby'
+    gem.name = 'lenjador-jruby'
   else
-    gem.name = 'logasm'
+    gem.name = 'lenjador'
   end
 
   gem.version       = '1.2.1'
   gem.authors       = ["Salemove"]
   gem.email         = ["support@salemove.com"]
-  gem.description   = %q{It's logasmic}
+  gem.description   = %q{It's lenjadoric}
   gem.summary       = %q{What description said}
   gem.license       = "MIT"
 

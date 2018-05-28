@@ -1,12 +1,12 @@
 require 'spec_helper'
 require 'json'
-require_relative '../../lib/logasm/adapters/stdout_json_adapter'
+require_relative '../../lib/lenjador/adapters/stdout_json_adapter'
 
-describe Logasm::Adapters::StdoutJsonAdapter do
+describe Lenjador::Adapters::StdoutJsonAdapter do
   let(:debug_level_code) { 0 }
-  let(:debug_level) { Logasm::Adapters::LOG_LEVELS[debug_level_code] }
+  let(:debug_level) { Lenjador::Adapters::LOG_LEVELS[debug_level_code] }
   let(:info_level_code) { 1 }
-  let(:info_level) { Logasm::Adapters::LOG_LEVELS[info_level_code] }
+  let(:info_level) { Lenjador::Adapters::LOG_LEVELS[info_level_code] }
 
   let(:stdout) { StringIO.new }
 
@@ -31,7 +31,7 @@ describe Logasm::Adapters::StdoutJsonAdapter do
       let(:application_name) { 'my_service' }
 
       before do
-        allow(Logasm::Utils).to receive(:build_event)
+        allow(Lenjador::Utils).to receive(:build_event)
           .with(metadata, info_level, application_name)
           .and_return(event)
       end

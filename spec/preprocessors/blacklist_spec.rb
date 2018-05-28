@@ -1,7 +1,7 @@
 require 'spec_helper'
-require_relative '../../lib/logasm/preprocessors/blacklist'
+require_relative '../../lib/lenjador/preprocessors/blacklist'
 
-describe Logasm::Preprocessors::Blacklist do
+describe Lenjador::Preprocessors::Blacklist do
   subject(:processed_data) { described_class.new(config).process(data) }
 
   let(:config) {{
@@ -23,7 +23,7 @@ describe Logasm::Preprocessors::Blacklist do
     let(:action) { 'reverse' }
 
     it 'throws exception' do
-      expect { processed_data }.to raise_exception(Logasm::Preprocessors::Blacklist::UnsupportedActionException)
+      expect { processed_data }.to raise_exception(Lenjador::Preprocessors::Blacklist::UnsupportedActionException)
     end
   end
 

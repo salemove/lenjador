@@ -1,6 +1,6 @@
 require 'lru_redux'
 
-class Logasm
+class Lenjador
   module Preprocessors
     class JSONPointerTrie
       SEPARATOR = '/'.freeze

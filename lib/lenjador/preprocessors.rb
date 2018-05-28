@@ -1,4 +1,4 @@
-class Logasm
+class Lenjador
   module Preprocessors
     def self.get(type, arguments)
       preprocessor =
