@@ -1,4 +1,4 @@
-class Logasm
+class Lenjador
   module Preprocessors
     module Strategies
       class Prune

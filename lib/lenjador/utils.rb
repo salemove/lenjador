@@ -1,6 +1,6 @@
 require 'time'
 
-class Logasm
+class Lenjador
   module Utils
     DECIMAL_FRACTION_OF_SECOND = 3
 

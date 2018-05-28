@@ -1,4 +1,4 @@
-class Logasm
+class Lenjador
   class NullLogger
     def debug(*)
     end

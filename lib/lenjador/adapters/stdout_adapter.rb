@@ -1,6 +1,6 @@
 require 'forwardable'
 
-class Logasm
+class Lenjador
   module Adapters
     class StdoutAdapter
       extend Forwardable

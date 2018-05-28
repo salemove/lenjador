@@ -1,5 +1,5 @@
 require 'bundler/setup'
-require 'logasm/preprocessors/whitelist'
+require 'lenjador/preprocessors/whitelist'
 require 'benchmark/ips'
 
 pointers = %w[
@@ -11,7 +11,7 @@ pointers = %w[
 ]
 
 %w[prune mask].each do |action|
-  preprocessor = Logasm::Preprocessors::Whitelist.new(pointers: pointers, action: action)
+  preprocessor = Lenjador::Preprocessors::Whitelist.new(pointers: pointers, action: action)
 
   Benchmark.ips do |x|
     x.config(time: 5, warmup: 2)

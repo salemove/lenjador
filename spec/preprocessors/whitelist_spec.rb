@@ -1,7 +1,7 @@
 require 'spec_helper'
-require_relative '../../lib/logasm/preprocessors/whitelist'
+require_relative '../../lib/lenjador/preprocessors/whitelist'
 
-RSpec.describe Logasm::Preprocessors::Whitelist, 'when :action is :mask or omitted' do
+RSpec.describe Lenjador::Preprocessors::Whitelist, 'when :action is :mask or omitted' do
   subject(:processed_data) { described_class.new(config).process(data) }
 
   let(:config) { { pointers: pointers } }
@@ -28,7 +28,7 @@ RSpec.describe Logasm::Preprocessors::Whitelist, 'when :action is :mask or omitt
     let(:pointers) { ['/field/'] }
 
     it 'throws exception' do
-      expect { processed_data }.to raise_exception(Logasm::Preprocessors::Whitelist::InvalidPointerFormatException)
+      expect { processed_data }.to raise_exception(Lenjador::Preprocessors::Whitelist::InvalidPointerFormatException)
     end
   end
 
@@ -200,7 +200,7 @@ RSpec.describe Logasm::Preprocessors::Whitelist, 'when :action is :mask or omitt
   end
 end
 
-RSpec.describe Logasm::Preprocessors::Whitelist, 'when :action is :exclude or :prune' do
+RSpec.describe Lenjador::Preprocessors::Whitelist, 'when :action is :exclude or :prune' do
   subject(:processed_data) { described_class.new(config).process(data) }
 
   let(:config) { { pointers: pointers, action: :prune } }

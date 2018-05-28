@@ -1,7 +1,7 @@
 require 'spec_helper'
-require_relative '../../lib/logasm/adapters/stdout_adapter'
+require_relative '../../lib/lenjador/adapters/stdout_adapter'
 
-describe Logasm::Adapters::StdoutAdapter do
+describe Lenjador::Adapters::StdoutAdapter do
   it 'creates a stdout logger' do
     io_logger = described_class.new(0)
 

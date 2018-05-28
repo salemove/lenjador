@@ -1,4 +1,4 @@
-class Logasm
+class Lenjador
   module Adapters
     LOG_LEVELS = %w(debug info warn error fatal unknown).freeze
 

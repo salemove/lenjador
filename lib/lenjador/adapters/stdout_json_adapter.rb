@@ -1,4 +1,4 @@
-class Logasm
+class Lenjador
   module Adapters
     class StdoutJsonAdapter
       def initialize(level, service_name, *)

@@ -1,12 +1,12 @@
 require 'logger'
-require_relative 'logasm/adapters'
-require_relative 'logasm/utils'
-require_relative 'logasm/null_logger'
-require_relative 'logasm/preprocessors'
+require_relative 'lenjador/adapters'
+require_relative 'lenjador/utils'
+require_relative 'lenjador/null_logger'
+require_relative 'lenjador/preprocessors'
 
 LOG_LEVEL_QUERY_METHODS = [:debug?, :info?, :warn?, :error?, :fatal?]
 
-class Logasm
+class Lenjador
   def self.build(service_name, loggers_config, preprocessors_config = {})
     loggers_config ||= {stdout: nil}
     preprocessors = preprocessors_config.map do |type, arguments|

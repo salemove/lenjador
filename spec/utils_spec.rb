@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Logasm::Utils do
+describe Lenjador::Utils do
   let(:now) { Time.utc(2015, 10, 11, 23, 10, 21, 123456) }
 
   before do
