@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'logger'
 require_relative 'lenjador/adapters'
 require_relative 'lenjador/utils'
 require_relative 'lenjador/null_logger'
 require_relative 'lenjador/preprocessors'
 
-LOG_LEVEL_QUERY_METHODS = [:debug?, :info?, :warn?, :error?, :fatal?]
+LOG_LEVEL_QUERY_METHODS = %i[debug? info? warn? error? fatal?].freeze
 
 class Lenjador
   def self.build(service_name, loggers_config, preprocessors_config = {})
@@ -45,7 +47,7 @@ class Lenjador
 
   LOG_LEVEL_QUERY_METHODS.each do |method|
     define_method(method) do
-      @adapters.any? {|adapter| adapter.public_send(method) }
+      @adapters.any? { |adapter| adapter.public_send(method) }
     end
   end
 
@@ -69,6 +71,6 @@ class Lenjador
   def parse_log_data(message = nil, metadata = {}, &block)
     return message if message.is_a?(Hash)
 
-    (metadata || {}).merge(message: block ? block.call : message)
+    (metadata || {}).merge(message: block ? yield : message)
   end
 end

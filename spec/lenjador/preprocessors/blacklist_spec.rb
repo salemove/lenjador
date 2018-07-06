@@ -1,21 +1,25 @@
 require 'spec_helper'
-require_relative '../../lib/lenjador/preprocessors/blacklist'
+require_relative '../../../lib/lenjador/preprocessors/blacklist'
 
 describe Lenjador::Preprocessors::Blacklist do
   subject(:processed_data) { described_class.new(config).process(data) }
 
-  let(:config) {{
-    fields: [{ key: 'field', action: action }]
-  }}
+  let(:config) do
+    {
+      fields: [{key: 'field', action: action}]
+    }
+  end
 
   let(:action) {}
-  let(:data) {{
-    field: value,
-    data: {
-      field: 'secret'
-    },
-    array: [{field: 'secret'}]
-  }}
+  let(:data) do
+    {
+      field: value,
+      data: {
+        field: 'secret'
+      },
+      array: [{field: 'secret'}]
+    }
+  end
 
   let(:value) { 'secret' }
 
@@ -39,7 +43,7 @@ describe Lenjador::Preprocessors::Blacklist do
     end
 
     it 'removes nested in array field' do
-      expect(processed_data[:array]).not_to include({field: 'secret'})
+      expect(processed_data[:array]).not_to include(field: 'secret')
     end
 
     context 'when field is deeply nested' do
@@ -60,7 +64,7 @@ describe Lenjador::Preprocessors::Blacklist do
     end
 
     it 'masks nested in array field' do
-      expect(processed_data[:array]).to include({field: '*****'})
+      expect(processed_data[:array]).to include(field: '*****')
     end
 
     context 'when field is string' do
@@ -88,7 +92,7 @@ describe Lenjador::Preprocessors::Blacklist do
     end
 
     context 'when field is array' do
-      let(:value) { [1,2,3,4] }
+      let(:value) { [1, 2, 3, 4] }
 
       it 'masks value with asterisks' do
         expect(processed_data).to include(field: '*****')

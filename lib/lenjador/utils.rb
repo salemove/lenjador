@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'time'
 
 class Lenjador
@@ -70,7 +72,7 @@ class Lenjador
       end
     else
       require 'oj'
-      DUMP_OPTIONS = { mode: :compat, time_format: :ruby }.freeze
+      DUMP_OPTIONS = {mode: :compat, time_format: :ruby}.freeze
 
       def self.generate_json(obj)
         serialize_time_objects!(obj)
@@ -82,9 +84,9 @@ class Lenjador
     def self.underscore(input)
       word = input.to_s.dup
       word.gsub!(/::/, '/')
-      word.gsub!(/([A-Z]+)([A-Z][a-z])/,'\1_\2')
-      word.gsub!(/([a-z\d])([A-Z])/,'\1_\2')
-      word.tr!("-", "_")
+      word.gsub!(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
+      word.gsub!(/([a-z\d])([A-Z])/, '\1_\2')
+      word.tr!('-', '_')
       word.downcase!
       word
     end
@@ -99,9 +101,7 @@ class Lenjador
     # already implement them. These methods are likely to be added to the API
     # very soon: https://github.com/opentracing/specification/blob/master/rfc/trace_identifiers.md
     def self.tracing_information
-      if !defined?(OpenTracing) || !OpenTracing.respond_to?(:active_span)
-        return NO_TRACE_INFORMATION
-      end
+      return NO_TRACE_INFORMATION if !defined?(OpenTracing) || !OpenTracing.respond_to?(:active_span)
 
       context = OpenTracing.active_span&.context
       if context && context.respond_to?(:trace_id) && context.respond_to?(:span_id)

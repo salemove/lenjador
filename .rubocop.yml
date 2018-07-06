@@ -1,0 +1,38 @@
+inherit_gem:
+  rubocop-salemove: config/default.yml
+
+Style/FrozenStringLiteralComment:
+  Enabled: yes
+  EnforcedStyle: always
+  Include:
+    - 'lib/**/*'
+
+Metrics/MethodLength:
+  Enabled: no
+
+Style/GuardClause:
+  Enabled: no
+
+RSpec/VerifiedDoubles:
+  Enabled: no
+
+Metrics/BlockLength:
+  Enabled: no
+
+RSpec/MessageSpies:
+  Enabled: no
+
+RSpec/ExpectOutput:
+  Enabled: no
+
+RSpec/ExampleLength:
+  Enabled: no
+
+RSpec/MultipleExpectations:
+  Enabled: no
+
+Style/SafeNavigation:
+  Enabled: no
+
+Performance/RegexpMatch:
+  Enabled: no

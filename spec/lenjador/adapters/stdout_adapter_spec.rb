@@ -1,5 +1,5 @@
 require 'spec_helper'
-require_relative '../../lib/lenjador/adapters/stdout_adapter'
+require 'lenjador/adapters/stdout_adapter'
 
 describe Lenjador::Adapters::StdoutAdapter do
   it 'creates a stdout logger' do

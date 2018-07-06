@@ -30,7 +30,7 @@ describe Lenjador do
     end
 
     it 'creates preprocessor when preprocessor defined' do
-      expect(described_class).to receive(:new) do |adapters, preprocessors|
+      expect(described_class).to receive(:new) do |_adapters, preprocessors|
         expect(preprocessors.count).to be(1)
         expect(preprocessors.first).to be_a(described_class::Preprocessors::Blacklist)
       end
@@ -104,7 +104,7 @@ describe Lenjador do
     end
   end
 
-  context 'log level queries' do
+  context 'with log level' do
     context 'when adapter has debug level' do
       let(:logger) do
         described_class.build('test_service', stdout: {level: 'debug'})
@@ -135,7 +135,7 @@ describe Lenjador do
   end
 
   it 'has the same interface as Ruby logger' do
-    skip "https://salemove.atlassian.net/browse/INF-464"
+    skip 'https://salemove.atlassian.net/browse/INF-464'
     logger = described_class.build('test_service', stdout: {level: 'debug'})
     expect(logger).to implement_interface(Logger)
   end

@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class Lenjador
   module Preprocessors
     module Strategies
       class Mask
-        MASK_SYMBOL = '*'.freeze
+        MASK_SYMBOL = '*'
         MASKED_VALUE = MASK_SYMBOL * 5
 
         def initialize(trie)
