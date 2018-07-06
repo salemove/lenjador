@@ -40,7 +40,7 @@ class Lenjador
       private
 
       def meets_threshold?(level)
-        LOG_LEVELS.index(level.to_s) >= @level
+        LOG_LEVELS.index(level) >= @level
       end
 
       # puts is atomic in MRI starting from 2.5.0

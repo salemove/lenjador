@@ -2,7 +2,7 @@
 
 class Lenjador
   module Adapters
-    LOG_LEVELS = %w[debug info warn error fatal unknown].freeze
+    LOG_LEVELS = %i[debug info warn error fatal unknown].freeze
 
     def self.get(type, service_name, arguments)
       raise "Unsupported logger: #{type}" if type != 'stdout'
@@ -15,7 +15,7 @@ class Lenjador
           require_relative 'adapters/stdout_adapter'
           StdoutAdapter
         end
-      level = LOG_LEVELS.index(arguments.fetch(:level, 'debug'))
+      level = LOG_LEVELS.index(arguments.fetch(:level, :debug).to_sym)
       adapter.new(level, service_name, arguments)
     end
   end
