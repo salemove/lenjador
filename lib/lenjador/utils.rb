@@ -14,9 +14,9 @@ class Lenjador
     # @return [Hash]
     def self.build_event(metadata, level, application_name)
       overwritable_params
-        .merge(metadata)
-        .merge(tracing_information)
-        .merge(
+        .merge!(metadata)
+        .merge!(tracing_information)
+        .merge!(
           application: application_name,
           level: level
         )
