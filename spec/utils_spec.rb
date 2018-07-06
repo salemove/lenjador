@@ -36,11 +36,53 @@ describe Lenjador::Utils do
     end
 
     context 'when host provided' do
-      let(:metadata) { {message: 'test', host: 'xyz'} }
+      let(:metadata) { { message: 'test', host: 'xyz' } }
 
       it 'overwrites host' do
         expect(subject[:message]).to eq('test')
         expect(subject[:host]).to eq('xyz')
+      end
+    end
+
+    context 'when OpenTracing is defined' do
+      let(:trace_id) { 'trace-id' }
+      let(:span_id) { 'span-id' }
+
+      it 'includes tracing data in the event when active span is present' do
+        span_context = double(trace_id: trace_id, span_id: span_id)
+        span = double(context: span_context)
+        open_tracing = double(active_span: span)
+        stub_const('OpenTracing', open_tracing)
+
+        expect(event).to include(
+          trace_id: trace_id,
+          span_id: span_id
+        )
+      end
+
+      it 'does not include tracing data if active span is not present' do
+        open_tracing = double(active_span: nil)
+        stub_const('OpenTracing', open_tracing)
+
+        expect(event).not_to include(:trace_id, :span_id)
+      end
+
+      it 'does not include tracing data if active span does not respond to trace_id' do
+        span_context = double(span_id: span_id)
+        span = double(context: span_context)
+        open_tracing = double(active_span: span)
+        stub_const('OpenTracing', open_tracing)
+
+        expect(event).not_to include(:trace_id, :span_id)
+      end
+
+      it 'does not include tracing data if active span does not respond to span_id' do
+        span_context = double(trace_id: trace_id)
+        span = double(context: span_context)
+        open_tracing = double(active_span: span)
+        stub_const('OpenTracing', open_tracing)
+
+        expect(event).not_to include(:trace_id, :span_id)
       end
     end
   end

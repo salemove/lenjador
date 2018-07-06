@@ -3,6 +3,7 @@ require 'time'
 class Lenjador
   module Utils
     DECIMAL_FRACTION_OF_SECOND = 3
+    NO_TRACE_INFORMATION = {}.freeze
 
     # Build logstash json compatible event
     #
@@ -14,6 +15,7 @@ class Lenjador
     def self.build_event(metadata, level, application_name)
       overwritable_params
         .merge(metadata)
+        .merge(tracing_information)
         .merge(
           application: application_name,
           level: level
@@ -37,6 +39,7 @@ class Lenjador
         :@timestamp => Time.now.utc.iso8601(DECIMAL_FRACTION_OF_SECOND)
       }
     end
+    private_class_method :overwritable_params
 
     def self.serialize_time_objects!(object)
       if object.is_a?(Hash)
@@ -86,6 +89,30 @@ class Lenjador
       word
     end
 
-    private_class_method :overwritable_params
+    # Tracing information
+    #
+    # Tracing information is included only if OpenTracing is defined and if it
+    # supports method called `active_span` (version >= 0.4.1). We use
+    # SpanContext#trace_id and SpanContext#span_id methods to retrieve tracing
+    # information. These methods are not yet supported by the OpenTracing API,
+    # so we first check if these methods exist. Popular tracing libraries
+    # already implement them. These methods are likely to be added to the API
+    # very soon: https://github.com/opentracing/specification/blob/master/rfc/trace_identifiers.md
+    def self.tracing_information
+      if !defined?(OpenTracing) || !OpenTracing.respond_to?(:active_span)
+        return NO_TRACE_INFORMATION
+      end
+
+      context = OpenTracing.active_span&.context
+      if context && context.respond_to?(:trace_id) && context.respond_to?(:span_id)
+        {
+          trace_id: context.trace_id,
+          span_id: context.span_id
+        }
+      else
+        NO_TRACE_INFORMATION
+      end
+    end
+    private_class_method :tracing_information
   end
 end
