@@ -21,20 +21,20 @@ pointers = %w[
     end
 
     x.report("Flat hash whitelisting (action=#{action})") do
-      preprocessor.process(flat_hash: { scalar: 'value', array: [1, 2], hash: {} })
+      preprocessor.process(flat_hash: {scalar: 'value', array: [1, 2], hash: {}})
     end
 
     x.report("Nested hash whitelisting (action=#{action})") do
       preprocessor.process(
         nested_hash: {
           next_level_hash: {
-            deep_hash: { scalar: 'value', array: [1, 2] }
+            deep_hash: {scalar: 'value', array: [1, 2]}
           },
           next_level_hash2: {
-            deep_hash: { scalar: 'value', array: [1, 2] }
+            deep_hash: {scalar: 'value', array: [1, 2]}
           },
           next_level_hash3: {
-            deep_hash: { scalar: 'value', array: [1, 2] }
+            deep_hash: {scalar: 'value', array: [1, 2]}
           }
         }
       )
@@ -43,9 +43,9 @@ pointers = %w[
     x.report("Flat array whitelisting (action=#{action})") do
       preprocessor.process(
         nested_array: [
-          { deep_array: [1, 2, 3] },
-          { deep_array: [1, 2, 3] },
-          { deep_array: [1, 2, 3] }
+          {deep_array: [1, 2, 3]},
+          {deep_array: [1, 2, 3]},
+          {deep_array: [1, 2, 3]}
         ]
       )
     end

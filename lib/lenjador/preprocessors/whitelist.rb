@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'lenjador/preprocessors/json_pointer_trie'
 require 'lenjador/preprocessors/strategies/mask'
 require 'lenjador/preprocessors/strategies/prune'
@@ -6,12 +8,12 @@ class Lenjador
   module Preprocessors
     class Whitelist
       DEFAULT_WHITELIST = %w[/id /message /correlation_id /queue].freeze
-      MASK_SYMBOL = '*'.freeze
+      MASK_SYMBOL = '*'
       MASKED_VALUE = MASK_SYMBOL * 5
 
       PRUNE_ACTION_NAMES = %w[prune exclude].freeze
 
-      class InvalidPointerFormatException < Exception
+      class InvalidPointerFormatException < RuntimeError
       end
 
       def initialize(config = {})
@@ -31,9 +33,7 @@ class Lenjador
       private
 
       def validate_pointer(pointer)
-        if pointer.slice(-1) == '/'
-          raise InvalidPointerFormatException, 'Pointer should not contain trailing slash'
-        end
+        raise InvalidPointerFormatException, 'Pointer should not contain trailing slash' if pointer.slice(-1) == '/'
       end
 
       def decode(pointer)

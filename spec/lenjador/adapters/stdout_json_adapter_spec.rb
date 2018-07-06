@@ -1,6 +1,6 @@
 require 'spec_helper'
 require 'json'
-require_relative '../../lib/lenjador/adapters/stdout_json_adapter'
+require 'lenjador/adapters/stdout_json_adapter'
 
 describe Lenjador::Adapters::StdoutJsonAdapter do
   let(:debug_level_code) { 0 }

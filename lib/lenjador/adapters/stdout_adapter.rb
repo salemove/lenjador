@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'forwardable'
 
 class Lenjador
@@ -16,7 +18,7 @@ class Lenjador
 
       def log(level, metadata = {})
         message = metadata[:message]
-        data = metadata.select { |key, value| key != :message }
+        data = metadata.reject { |key, _value| key == :message }
         log_data = [
           message,
           data.empty? ? nil : Utils.generate_json(data)

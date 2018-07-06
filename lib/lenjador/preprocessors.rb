@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Lenjador
   module Preprocessors
     def self.get(type, arguments)

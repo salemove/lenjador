@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Lenjador
   module Adapters
     class StdoutJsonAdapter
@@ -5,14 +7,14 @@ class Lenjador
         @level = level
         @service_name = service_name
         @application_name = Utils.application_name(service_name)
-        @mutex = Mutex.new if RUBY_ENGINE == "jruby"
+        @mutex = Mutex.new if RUBY_ENGINE == 'jruby'
       end
 
       def log(level, metadata = {})
-        if meets_threshold?(level)
-          message = Utils.build_event(metadata, level, @application_name)
-          print_line(Utils.generate_json(message))
-        end
+        return unless meets_threshold?(level)
+
+        message = Utils.build_event(metadata, level, @application_name)
+        print_line(Utils.generate_json(message))
       end
 
       def debug?
@@ -38,15 +40,15 @@ class Lenjador
       private
 
       def meets_threshold?(level)
-        LOG_LEVELS.index(level.to_s) >= @level
+        LOG_LEVELS.index(level) >= @level
       end
 
       # puts is atomic in MRI starting from 2.5.0
-      if RUBY_ENGINE == "ruby" && RUBY_VERSION >= "2.5.0"
+      if RUBY_ENGINE == 'ruby' && RUBY_VERSION >= '2.5.0'
         def print_line(str)
           $stdout.puts(str)
         end
-      elsif RUBY_ENGINE == "jruby"
+      elsif RUBY_ENGINE == 'jruby'
         def print_line(str)
           @mutex.synchronize { $stdout.write(str + "\n") }
         end

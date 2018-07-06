@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'lru_redux'
 
 class Lenjador
   module Preprocessors
     class JSONPointerTrie
-      SEPARATOR = '/'.freeze
-      WILDCARD = '~'.freeze
+      SEPARATOR = '/'
+      WILDCARD = '~'
       DEFAULT_CACHE_SIZE = 100
 
       def initialize(cache_size: DEFAULT_CACHE_SIZE, **)

@@ -1,18 +1,15 @@
+# frozen_string_literal: true
+
 class Lenjador
   class NullLogger
-    def debug(*)
-    end
+    def debug(*); end
 
-    def info(*)
-    end
+    def info(*); end
 
-    def warn(*)
-    end
+    def warn(*); end
 
-    def error(*)
-    end
+    def error(*); end
 
-    def fatal(*)
-    end
+    def fatal(*); end
   end
 end
