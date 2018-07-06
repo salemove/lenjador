@@ -23,6 +23,7 @@ Gem::Specification.new do |gem|
     gem.add_dependency 'jrjackson'
   else
     gem.add_dependency 'oj'
+    gem.add_development_dependency 'ruby-prof'
   end
 
   gem.add_development_dependency 'benchmark-ips'
