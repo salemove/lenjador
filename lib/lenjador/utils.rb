@@ -38,26 +38,10 @@ class Lenjador
 
     def self.overwritable_params
       {
-        :@timestamp => Time.now.utc.iso8601(DECIMAL_FRACTION_OF_SECOND)
+        :@timestamp => Time.now
       }
     end
     private_class_method :overwritable_params
-
-    def self.serialize_time_objects!(object)
-      if object.is_a?(Hash)
-        object.each do |key, value|
-          object[key] = serialize_time_objects!(value)
-        end
-      elsif object.is_a?(Array)
-        object.each_index do |index|
-          object[index] = serialize_time_objects!(object[index])
-        end
-      elsif object.is_a?(Time) || object.is_a?(Date)
-        object.iso8601
-      else
-        object
-      end
-    end
 
     if RUBY_PLATFORM =~ /java/
       require 'jrjackson'
@@ -72,11 +56,13 @@ class Lenjador
       end
     else
       require 'oj'
-      DUMP_OPTIONS = {mode: :compat, time_format: :ruby}.freeze
+      DUMP_OPTIONS = {
+        mode: :custom,
+        time_format: :xmlschema,
+        second_precision: 3
+      }.freeze
 
       def self.generate_json(obj)
-        serialize_time_objects!(obj)
-
         Oj.dump(obj, DUMP_OPTIONS)
       end
     end

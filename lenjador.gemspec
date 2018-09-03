@@ -22,7 +22,7 @@ Gem::Specification.new do |gem|
   if RUBY_PLATFORM =~ /java/
     gem.add_dependency 'jrjackson'
   else
-    gem.add_dependency 'oj'
+    gem.add_dependency 'oj', '~> 3.6'
     gem.add_development_dependency 'ruby-prof'
   end
 

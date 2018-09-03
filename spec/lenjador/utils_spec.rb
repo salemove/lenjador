@@ -25,7 +25,7 @@ describe Lenjador::Utils do
     end
 
     it 'includes timestamp' do
-      expect(event[:@timestamp]).to eq('2015-10-11T23:10:21.123Z')
+      expect(event[:@timestamp]).to eq(now)
     end
 
     context 'when @timestamp provided' do
@@ -89,40 +89,11 @@ describe Lenjador::Utils do
     end
   end
 
-  describe '.serialize_time_objects!' do
-    let(:object) do
-      {
-        time: Time.now,
-        hash: {
-          time: Time.now
-        },
-        array: [
-          Time.now,
-          {
-            time: Time.now
-          }
-        ]
-      }
-    end
-
-    let(:serialized_time) { now.iso8601 }
-
-    it 'recursively serializes time objects to iso8601' do
-      o = object.dup
-      described_class.serialize_time_objects!(o)
-
-      expect(o).to eq(
-        time: serialized_time,
-        hash: {
-          time: serialized_time
-        },
-        array: [
-          serialized_time,
-          {
-            time: serialized_time
-          }
-        ]
-      )
+  describe '.generate_json' do
+    it 'serializes time objects to iso8601' do
+      serialized_time = now.iso8601(3)
+      json = described_class.generate_json(time: now)
+      expect(json).to eq(%({"time":"#{serialized_time}"}))
     end
   end
 end
