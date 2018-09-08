@@ -5,7 +5,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |gem|
   gem.name          = RUBY_PLATFORM =~ /java/ ? 'lenjador-jruby' : 'lenjador'
-  gem.version       = '1.3.0'
+  gem.version       = '1.4.0'
   gem.authors       = ['Salemove']
   gem.email         = ['support@salemove.com']
   gem.description   = "It's lenjadoric"
@@ -22,7 +22,7 @@ Gem::Specification.new do |gem|
   if RUBY_PLATFORM =~ /java/
     gem.add_dependency 'jrjackson'
   else
-    gem.add_dependency 'oj'
+    gem.add_dependency 'oj', '~> 3.6'
     gem.add_development_dependency 'ruby-prof'
   end
 
