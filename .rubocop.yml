@@ -36,3 +36,6 @@ Style/SafeNavigation:
 
 Performance/RegexpMatch:
   Enabled: no
+
+Style/SingleLineMethods:
+  Enabled: no

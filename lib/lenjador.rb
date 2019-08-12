@@ -6,60 +6,67 @@ require_relative 'lenjador/utils'
 require_relative 'lenjador/null_logger'
 require_relative 'lenjador/preprocessors'
 
-LOG_LEVEL_QUERY_METHODS = %i[debug? info? warn? error? fatal?].freeze
-
 class Lenjador
-  def self.build(service_name, loggers_config, preprocessors_config = {})
-    loggers_config ||= {stdout: nil}
+  Severity = ::Logger::Severity
+  SEV_LABEL = %w[debug info warn error fatal any].freeze
+
+  def self.build(service_name, logger_config, preprocessors_config = {})
+    logger_config ||= {}
+
     preprocessors = preprocessors_config.map do |type, arguments|
       Preprocessors.get(type.to_s, arguments || {})
     end
-    adapters = loggers_config.map do |type, arguments|
-      Adapters.get(type.to_s, service_name, arguments || {})
-    end
-    new(adapters, preprocessors)
+    adapter = Adapters.get(service_name, logger_config)
+    level = SEV_LABEL.index(logger_config.fetch(:level, 'debug'))
+
+    new(adapter, level, preprocessors)
   end
 
-  def initialize(adapters, preprocessors)
-    @adapters = adapters
+  def initialize(adapter, level, preprocessors)
+    @adapter = adapter
+    @level = level
     @preprocessors = preprocessors
   end
 
   def debug(*args, &block)
-    log :debug, *args, &block
+    log(Severity::DEBUG, *args, &block)
   end
 
   def info(*args, &block)
-    log :info, *args, &block
+    log(Severity::INFO, *args, &block)
   end
 
   def warn(*args, &block)
-    log :warn, *args, &block
+    log(Severity::WARN, *args, &block)
   end
 
   def error(*args, &block)
-    log :error, *args, &block
+    log(Severity::ERROR, *args, &block)
   end
 
   def fatal(*args, &block)
-    log :fatal, *args, &block
+    log(Severity::FATAL, *args, &block)
   end
 
-  LOG_LEVEL_QUERY_METHODS.each do |method|
-    define_method(method) do
-      @adapters.any? { |adapter| adapter.public_send(method) }
-    end
-  end
+  def debug?; @level <= Severity::DEBUG; end
+
+  def info?; @level <= Severity::INFO; end
+
+  def warn?; @level <= Severity::WARN; end
+
+  def error?; @level <= Severity::ERROR; end
+
+  def fatal?; @level <= Severity::FATAL; end
 
   private
 
   def log(level, *args, &block)
+    return true if level < @level
+
     data = parse_log_data(*args, &block)
     processed_data = preprocess(data)
 
-    @adapters.each do |adapter|
-      adapter.log(level, processed_data)
-    end
+    @adapter.log(level, processed_data)
   end
 
   def preprocess(data)
