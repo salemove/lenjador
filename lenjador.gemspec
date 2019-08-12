@@ -5,7 +5,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |gem|
   gem.name          = RUBY_PLATFORM =~ /java/ ? 'lenjador-jruby' : 'lenjador'
-  gem.version       = '1.4.0'
+  gem.version       = '2.0.0'
   gem.authors       = ['Salemove']
   gem.email         = ['support@salemove.com']
   gem.description   = "It's lenjadoric"
@@ -27,7 +27,7 @@ Gem::Specification.new do |gem|
   end
 
   gem.add_development_dependency 'benchmark-ips'
-  gem.add_development_dependency 'bundler', '~> 1.3'
+  gem.add_development_dependency 'bundler'
   gem.add_development_dependency 'pry'
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'

@@ -5,15 +5,10 @@ require 'forwardable'
 class Lenjador
   module Adapters
     class StdoutAdapter
-      extend Forwardable
-
       attr_reader :logger
 
-      def_delegators :@logger, :debug?, :info?, :warn?, :error?, :fatal?
-
-      def initialize(level, *)
+      def initialize(_service_name)
         @logger = Logger.new(STDOUT)
-        @logger.level = level
       end
 
       def log(level, metadata = {})
@@ -24,7 +19,7 @@ class Lenjador
           data.empty? ? nil : Utils.generate_json(data)
         ].compact.join(' ')
 
-        @logger.public_send level, log_data
+        @logger.add(level, log_data)
       end
     end
   end
