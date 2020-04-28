@@ -45,7 +45,7 @@ class Lenjador
       def build_trie(config)
         pointers = (config[:pointers] || []) + DEFAULT_WHITELIST
 
-        pointers.reduce(JSONPointerTrie.new(config)) do |trie, pointer|
+        pointers.reduce(JSONPointerTrie.new(**config)) do |trie, pointer|
           validate_pointer(pointer)
 
           trie.insert(decode(pointer))
