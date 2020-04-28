@@ -146,14 +146,6 @@ RSpec.describe Lenjador::Preprocessors::Whitelist do
       end
     end
 
-    context 'with whitelisted hash' do
-      let(:pointers) { ['/data'] }
-
-      it 'masks hash' do
-        expect(processed_data).to include(data: {field: '*****'})
-      end
-    end
-
     context 'when boolean present' do
       let(:data) { {bool: true} }
 
@@ -317,14 +309,6 @@ RSpec.describe Lenjador::Preprocessors::Whitelist do
 
       it 'masks array' do
         expect(processed_data).to include(array: [])
-      end
-    end
-
-    context 'with whitelisted hash' do
-      let(:pointers) { ['/data'] }
-
-      it 'masks hash' do
-        expect(processed_data).to include(data: {})
       end
     end
 
