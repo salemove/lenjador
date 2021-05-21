@@ -1,11 +1,17 @@
 # frozen_string_literal: true
 
 require 'time'
+require 'oj'
 
 class Lenjador
   module Utils
     DECIMAL_FRACTION_OF_SECOND = 3
     NO_TRACE_INFORMATION = {}.freeze
+    DUMP_OPTIONS = {
+      mode: :custom,
+      time_format: :xmlschema,
+      second_precision: 3
+    }.freeze
 
     # Build logstash json compatible event
     #
@@ -43,28 +49,8 @@ class Lenjador
     end
     private_class_method :overwritable_params
 
-    if RUBY_PLATFORM =~ /java/
-      require 'jrjackson'
-
-      DUMP_OPTIONS = {
-        timezone: 'utc',
-        date_format: "YYYY-MM-dd'T'HH:mm:ss.SSSX"
-      }.freeze
-
-      def self.generate_json(obj)
-        JrJackson::Json.dump(obj, DUMP_OPTIONS)
-      end
-    else
-      require 'oj'
-      DUMP_OPTIONS = {
-        mode: :custom,
-        time_format: :xmlschema,
-        second_precision: 3
-      }.freeze
-
-      def self.generate_json(obj)
-        Oj.dump(obj, DUMP_OPTIONS)
-      end
+    def self.generate_json(obj)
+      Oj.dump(obj, DUMP_OPTIONS)
     end
 
     def self.underscore(input)

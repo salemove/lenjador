@@ -4,7 +4,7 @@ lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |gem|
-  gem.name          = RUBY_PLATFORM =~ /java/ ? 'lenjador-jruby' : 'lenjador'
+  gem.name          = 'lenjador'
   gem.version       = '2.1.0'
   gem.authors       = ['Salemove']
   gem.email         = ['support@salemove.com']
@@ -19,13 +19,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ['lib']
 
   gem.add_dependency 'lru_redux'
-
-  if RUBY_PLATFORM =~ /java/
-    gem.add_dependency 'jrjackson'
-  else
-    gem.add_dependency 'oj', '~> 3.6'
-    gem.add_development_dependency 'ruby-prof'
-  end
+  gem.add_dependency 'oj', '~> 3.6'
 
   gem.add_development_dependency 'benchmark-ips'
   gem.add_development_dependency 'bundler'
@@ -33,4 +27,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'rubocop-salemove'
+  gem.add_development_dependency 'ruby-prof'
 end
