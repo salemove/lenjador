@@ -128,4 +128,23 @@ describe Lenjador do
       end
     end
   end
+
+  it 'allows changing log level on existing instance' do
+    logger = described_class.build('test_service', level: 'info')
+
+    logger.level = ::Logger::DEBUG
+    expect(logger.debug?).to eq(true)
+
+    logger.level = ::Logger::INFO
+    expect(logger.debug?).to eq(false)
+    expect(logger.info?).to eq(true)
+
+    logger.level = ::Logger::WARN
+    expect(logger.info?).to eq(false)
+    expect(logger.warn?).to eq(true)
+
+    logger.level = ::Logger::ERROR
+    expect(logger.warn?).to eq(false)
+    expect(logger.error?).to eq(true)
+  end
 end

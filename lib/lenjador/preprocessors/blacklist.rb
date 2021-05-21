@@ -20,7 +20,8 @@ class Lenjador
       end
 
       def process(data)
-        if data.is_a? Hash
+        case data
+        when Hash
           data.inject({}) do |mem, (key, val)|
             if (field = @fields_to_process[key.to_s])
               send(action_method(field[:action]), mem, key, val)
@@ -28,7 +29,7 @@ class Lenjador
               mem.merge(key => process(val))
             end
           end
-        elsif data.is_a? Array
+        when Array
           data.inject([]) do |mem, val|
             mem + [process(val)]
           end

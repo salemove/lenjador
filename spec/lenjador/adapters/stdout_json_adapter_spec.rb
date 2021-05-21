@@ -16,7 +16,7 @@ describe Lenjador::Adapters::StdoutJsonAdapter do
     end
   end
 
-  describe '#log' do
+  describe '#log' do # rubocop:disable RSpec/MultipleMemoizedHelpers
     let(:adapter) { described_class.new(service_name) }
     let(:metadata) { {x: 'y'} }
     let(:event) { {a: 'b', x: 'y'} }
@@ -34,7 +34,7 @@ describe Lenjador::Adapters::StdoutJsonAdapter do
 
     it 'sends serialized event to $stdout' do
       adapter.log(info, metadata)
-      expect(output).to eq serialized_event + "\n"
+      expect(output).to eq("#{serialized_event}\n")
     end
   end
 
