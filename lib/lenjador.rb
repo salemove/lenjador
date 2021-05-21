@@ -58,6 +58,12 @@ class Lenjador
 
   def fatal?; @level <= Severity::FATAL; end
 
+  def level=(new_level)
+    raise ArgumentError, "invalid log level: #{new_level}" unless new_level.is_a?(Integer)
+
+    @level = new_level
+  end
+
   private
 
   def log(level, *args, &block)
