@@ -22,11 +22,11 @@ class Lenjador
         end
       elsif RUBY_ENGINE == 'jruby'
         def print_line(str)
-          @mutex.synchronize { $stdout.write(str + "\n") }
+          @mutex.synchronize { $stdout.write("#{str}\n") }
         end
       else
         def print_line(str)
-          $stdout.write(str + "\n")
+          $stdout.write("#{str}\n")
         end
       end
     end

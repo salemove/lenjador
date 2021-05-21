@@ -8,7 +8,7 @@ class Lenjador
       attr_reader :logger
 
       def initialize(_service_name)
-        @logger = Logger.new(STDOUT)
+        @logger = Logger.new($stdout)
       end
 
       def log(level, metadata = {})

@@ -46,7 +46,7 @@ describe Lenjador::Utils do
       end
     end
 
-    context 'when OpenTracing is defined' do
+    context 'when OpenTracing is defined' do # rubocop:disable RSpec/MultipleMemoizedHelpers
       let(:trace_id) { 'trace-id' }
       let(:span_id) { 'span-id' }
 
