@@ -63,17 +63,37 @@ class Lenjador
       word
     end
 
-    # Tracing information
-    #
-    # Tracing information is included only if OpenTracing is defined and if it
-    # supports method called `active_span` (version >= 0.4.1). We use
-    # SpanContext#trace_id and SpanContext#span_id methods to retrieve tracing
-    # information. These methods are not yet supported by the OpenTracing API,
-    # so we first check if these methods exist. Popular tracing libraries
-    # already implement them. These methods are likely to be added to the API
-    # very soon: https://github.com/opentracing/specification/blob/master/rfc/trace_identifiers.md
     def self.tracing_information
-      return NO_TRACE_INFORMATION if !defined?(OpenTracing) || !OpenTracing.respond_to?(:active_span)
+      tracing_information_from_opentelemetry ||
+        tracing_information_from_opentracing ||
+        NO_TRACE_INFORMATION
+    end
+    private_class_method :tracing_information
+
+    def self.tracing_information_from_opentelemetry
+      return nil unless defined?(OpenTelemetry)
+
+      current_span_context = OpenTelemetry::Trace.current_span.context
+      return nil unless current_span_context.valid?
+
+      {
+        trace_id: current_span_context.hex_trace_id,
+        span_id: current_span_context.hex_span_id
+      }
+    end
+    private_class_method :tracing_information_from_opentelemetry
+
+    # Tracing information is included only if OpenTracing supports method
+    # called `active_span` (version >= 0.4.1). We use SpanContext#trace_id and
+    # SpanContext#span_id methods to retrieve tracing information. These
+    # methods are not yet supported by the OpenTracing API, so we first check
+    # if these methods exist. Popular tracing libraries already implement them.
+    # These methods are likely to be added to the API very soon:
+    # https://github.com/opentracing/specification/blob/master/rfc/trace_identifiers.md
+    #
+    # @deprecated Use OpenTelemetry instead
+    def self.tracing_information_from_opentracing
+      return nil if !defined?(OpenTracing) || !OpenTracing.respond_to?(:active_span)
 
       context = OpenTracing.active_span&.context
       if context && context.respond_to?(:trace_id) && context.respond_to?(:span_id)
@@ -81,10 +101,8 @@ class Lenjador
           trace_id: context.trace_id,
           span_id: context.span_id
         }
-      else
-        NO_TRACE_INFORMATION
       end
     end
-    private_class_method :tracing_information
+    private_class_method :tracing_information_from_opentracing
   end
 end
