@@ -5,7 +5,6 @@ class Lenjador
     class StdoutJsonAdapter
       def initialize(service_name)
         @application_name = Utils.application_name(service_name)
-        @mutex = Mutex.new if RUBY_ENGINE == 'jruby'
       end
 
       def log(level, metadata = {})
@@ -19,10 +18,6 @@ class Lenjador
       if RUBY_ENGINE == 'ruby' && RUBY_VERSION >= '2.5.0'
         def print_line(str)
           $stdout.puts(str)
-        end
-      elsif RUBY_ENGINE == 'jruby'
-        def print_line(str)
-          @mutex.synchronize { $stdout.write("#{str}\n") }
         end
       else
         def print_line(str)

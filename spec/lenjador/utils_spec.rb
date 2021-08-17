@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'opentelemetry-api'
 
 describe Lenjador::Utils do
   let(:now) { Time.utc(2015, 10, 11, 23, 10, 21, 123_456) }
@@ -43,6 +44,27 @@ describe Lenjador::Utils do
       it 'overwrites host' do
         expect(event[:message]).to eq('test')
         expect(event[:host]).to eq('xyz')
+      end
+    end
+
+    context 'when OpenTelemetry is defined' do
+      it 'includes trace information' do
+        provider = OpenTelemetry.tracer_provider
+
+        tracer = provider.tracer('my_app', '1.0')
+        recorded_event = tracer.in_span('my_task') do |_task_span|
+          event
+        end
+
+        expect(recorded_event).to include(
+          trace_id: instance_of(String),
+          span_id: instance_of(String)
+        )
+      end
+
+      it 'does not include trace information if span is invalid' do
+        expect(OpenTelemetry::Trace.current_span.context).not_to be_valid
+        expect(event).not_to include(:trace_id, :span_id)
       end
     end
 

@@ -5,7 +5,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |gem|
   gem.name          = 'lenjador'
-  gem.version       = '2.1.0'
+  gem.version       = '2.2.0'
   gem.authors       = ['Salemove']
   gem.email         = ['support@salemove.com']
   gem.description   = "It's lenjadoric"
@@ -23,6 +23,7 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency 'benchmark-ips'
   gem.add_development_dependency 'bundler'
+  gem.add_development_dependency 'opentelemetry-api'
   gem.add_development_dependency 'pry'
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'
