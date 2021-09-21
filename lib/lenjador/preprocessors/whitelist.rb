@@ -7,7 +7,7 @@ require 'lenjador/preprocessors/strategies/prune'
 class Lenjador
   module Preprocessors
     class Whitelist
-      DEFAULT_WHITELIST = %w[/id /message /correlation_id /queue].freeze
+      DEFAULT_WHITELIST = %w[/id /message /correlation_id /queue /trace_id /span_id].freeze
       MASK_SYMBOL = '*'
       MASKED_VALUE = MASK_SYMBOL * 5
 
