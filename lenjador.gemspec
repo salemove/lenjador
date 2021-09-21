@@ -5,7 +5,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |gem|
   gem.name          = 'lenjador'
-  gem.version       = '2.2.0'
+  gem.version       = '2.2.1'
   gem.authors       = ['Salemove']
   gem.email         = ['support@salemove.com']
   gem.description   = "It's lenjadoric"
