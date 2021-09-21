@@ -5,13 +5,13 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |gem|
   gem.name          = 'lenjador'
-  gem.version       = '2.2.0'
+  gem.version       = '2.2.1'
   gem.authors       = ['Salemove']
   gem.email         = ['support@salemove.com']
   gem.description   = "It's lenjadoric"
   gem.summary       = 'What description said'
   gem.license       = 'MIT'
-  gem.required_ruby_version = '>= 2.4'
+  gem.required_ruby_version = '>= 2.6'
 
   gem.files         = `git ls-files`.split($INPUT_RECORD_SEPARATOR)
   gem.executables   = gem.files.grep(%r{^bin/}) { |f| File.basename(f) }
