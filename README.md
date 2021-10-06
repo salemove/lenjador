@@ -119,3 +119,7 @@ Logger output:
 ```
 Received request {password: "********", "info": {"phone": "+12055555555"}, "addresses": [{"host": "example.com","path": "****"}]}
 ```
+
+## Releasing a new version
+
+A new version is created when a change is merged into the master branch that changes the version number in `lenjador.gemspec`. A Github Action will create a tag for the version and push the `.gem` file to [rubygems.org](https://rubygems.org)
