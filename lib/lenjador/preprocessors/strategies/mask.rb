@@ -21,8 +21,11 @@ class Lenjador
           when Array
             process_array(data, pointer)
 
-          else
+          when String, Numeric, Symbol, Date, Time, TrueClass, FalseClass, NilClass
             data
+
+          else
+            MASKED_VALUE
           end
         end
 
