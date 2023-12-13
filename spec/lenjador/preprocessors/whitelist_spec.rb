@@ -147,10 +147,105 @@ RSpec.describe Lenjador::Preprocessors::Whitelist do
     end
 
     context 'when boolean present' do
-      let(:data) { {bool: true} }
+      let(:pointers) { ['/bool'] }
+      let(:data) do
+        {
+          bool: true,
+          bool2: true
+        }
+      end
 
-      it 'masks it with asteriks' do
-        expect(processed_data).to eq(bool: '*****')
+      it 'masks only if not in whitelist' do
+        expect(processed_data).to eq({
+          bool: true,
+          bool2: '*****'
+        })
+      end
+    end
+
+    context 'when nil present' do
+      let(:pointers) { ['/nil'] }
+      let(:data) do
+        {
+          nil: nil,
+          nil2: nil
+        }
+      end
+
+      it 'masks only if not in whitelist' do
+        expect(processed_data).to eq({
+          nil: nil,
+          nil2: '*****'
+        })
+      end
+    end
+
+    context 'when numbers present' do
+      let(:data) do
+        {
+          integer: 1,
+          float: 2.03,
+          integer2: 3,
+          float2: 3.34324
+        }
+      end
+      let(:pointers) { ['/integer', '/float'] }
+
+      it 'masks only if not in whitelist' do
+        expect(processed_data).to eq({
+          integer: 1,
+          float: 2.03,
+          integer2: '*****',
+          float2: '*****'
+        })
+      end
+    end
+
+    context 'when symbol present' do
+      let(:data) do
+        {
+          symbol1: :symbol1,
+          symbol2: :symbol2
+        }
+      end
+      let(:pointers) { ['/symbol1'] }
+
+      it 'masks only if not in whitelist' do
+        expect(processed_data).to eq({
+          symbol1: :symbol1,
+          symbol2: '*****'
+        })
+      end
+    end
+
+    context 'when date time present' do
+      let(:data) do
+        {
+          date: Date.new(2023, 12, 12),
+          time: Time.new(2023, 12, 13),
+          datetime: DateTime.new(2023, 12, 14)
+        }
+      end
+      let(:pointers) { ['/date', '/time', '/datetime'] }
+
+      it 'shows dates' do
+        expect(processed_data).to eq({
+          date: Date.new(2023, 12, 12),
+          time: Time.new(2023, 12, 13),
+          datetime: DateTime.new(2023, 12, 14)
+        })
+      end
+    end
+
+    context 'when unsupported object present' do
+      let(:pointers) { ['/field'] }
+      let(:some_class) { OpenStruct.new(name: 'Rowdy', pin_code: '1234') }
+      let(:data) { {field: some_class} }
+
+      it 'masks the object' do
+        expect(processed_data).to eq(
+          field: '*****'
+        )
       end
     end
 
@@ -309,6 +404,103 @@ RSpec.describe Lenjador::Preprocessors::Whitelist do
 
       it 'masks array' do
         expect(processed_data).to include(array: [])
+      end
+    end
+
+    context 'when boolean present' do
+      let(:pointers) { ['/bool'] }
+      let(:data) do
+        {
+          bool: true,
+          bool2: true
+        }
+      end
+
+      it 'prunes only if not in whitelist' do
+        expect(processed_data).to eq({
+          bool: true
+        })
+      end
+    end
+
+    context 'when nil present' do
+      let(:pointers) { ['/nil'] }
+      let(:data) do
+        {
+          nil: nil,
+          nil2: nil
+        }
+      end
+
+      it 'prunes only if not in whitelist' do
+        expect(processed_data).to eq({
+          nil: nil
+        })
+      end
+    end
+
+    context 'when numbers present' do
+      let(:data) do
+        {
+          integer: 1,
+          float: 2.03,
+          integer2: 3,
+          float2: 3.34324
+        }
+      end
+      let(:pointers) { ['/integer', '/float'] }
+
+      it 'prunes only if not in whitelist' do
+        expect(processed_data).to eq({
+          integer: 1,
+          float: 2.03
+        })
+      end
+    end
+
+    context 'when symbol present' do
+      let(:data) do
+        {
+          symbol1: :symbol1,
+          symbol2: :symbol2
+        }
+      end
+      let(:pointers) { ['/symbol1'] }
+
+      it 'prunes only if not in whitelist' do
+        expect(processed_data).to eq({
+          symbol1: :symbol1
+        })
+      end
+    end
+
+    context 'when date time present' do
+      let(:data) do
+        {
+          date: Date.new(2023, 12, 12),
+          time: Time.new(2023, 12, 13),
+          datetime: DateTime.new(2023, 12, 14)
+        }
+      end
+      let(:pointers) { ['/date', '/time', '/datetime'] }
+
+      it 'shows dates' do
+        expect(processed_data).to eq({
+          date: Date.new(2023, 12, 12),
+          time: Time.new(2023, 12, 13),
+          datetime: DateTime.new(2023, 12, 14)
+        })
+      end
+    end
+
+    context 'when unsupported object present' do
+      let(:pointers) { ['/class'] }
+      let(:some_class) { OpenStruct.new(name: 'Rowdy', pin_code: '1234') }
+
+      let(:data) { {class: some_class} }
+
+      it 'does not return the object' do
+        expect(processed_data).to eq({class: nil})
       end
     end
 
