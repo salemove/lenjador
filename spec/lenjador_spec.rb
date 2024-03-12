@@ -37,6 +37,20 @@ describe Lenjador do
     end
   end
 
+  describe '#add' do
+    let(:adapter) { double }
+    let(:lenjador) { described_class.new(adapter, Lenjador::Severity::INFO, []) }
+
+    it 'logs with severity' do
+      expect(adapter).to receive(:log).with(described_class::Severity::INFO, message: 'info-msg').ordered
+      expect(adapter).to receive(:log).with(described_class::Severity::WARN, message: 'warn-msg').ordered
+
+      lenjador.add('debug', 'debug-msg')
+      lenjador.add('info', 'info-msg')
+      lenjador.add('warn', 'warn-msg')
+    end
+  end
+
   context 'when preprocessor defined' do
     let(:lenjador) { described_class.new(adapter, level, [preprocessor]) }
     let(:adapter) { double }

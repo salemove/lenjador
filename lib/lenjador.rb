@@ -28,6 +28,11 @@ class Lenjador
     @preprocessors = preprocessors
   end
 
+  def add(severity, *args, &block)
+    level = SEV_LABEL.index(severity.to_s)
+    log(level, *args, &block)
+  end
+
   def debug(*args, &block)
     log(Severity::DEBUG, *args, &block)
   end
