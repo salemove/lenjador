@@ -42,12 +42,14 @@ describe Lenjador do
     let(:lenjador) { described_class.new(adapter, Lenjador::Severity::INFO, []) }
 
     it 'logs with severity' do
-      expect(adapter).to receive(:log).with(described_class::Severity::INFO, message: 'info-msg').ordered
-      expect(adapter).to receive(:log).with(described_class::Severity::WARN, message: 'warn-msg').ordered
+      expect(adapter).to receive(:log).with(Logger::INFO, message: 'info-msg').ordered
+      expect(adapter).to receive(:log).with(Logger::WARN, message: 'warn-msg').ordered
+      expect(adapter).to receive(:log).with(Logger::UNKNOWN, message: 'unknown-msg').ordered
 
-      lenjador.add('debug', 'debug-msg')
-      lenjador.add('info', 'info-msg')
-      lenjador.add('warn', 'warn-msg')
+      lenjador.add(Logger::DEBUG, 'debug-msg')
+      lenjador.add(Logger::INFO, 'info-msg')
+      lenjador.add(Logger::WARN, 'warn-msg')
+      lenjador.add(Logger::UNKNOWN, 'unknown-msg')
     end
   end
 
