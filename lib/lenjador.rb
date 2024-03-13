@@ -29,8 +29,7 @@ class Lenjador
   end
 
   def add(severity, *args, &block)
-    level = SEV_LABEL.index(severity.to_s)
-    log(level, *args, &block)
+    log(severity, *args, &block)
   end
 
   def debug(*args, &block)

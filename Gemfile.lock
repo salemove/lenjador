@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    lenjador (2.3.0)
+    lenjador (2.3.1)
       lru_redux
       oj (~> 3.6)
 
