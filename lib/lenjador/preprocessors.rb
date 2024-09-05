@@ -11,6 +11,9 @@ class Lenjador
         when 'whitelist'
           require_relative 'preprocessors/whitelist'
           Preprocessors::Whitelist
+        when 'static_tags'
+          require_relative 'preprocessors/static_tags'
+          Preprocessors::StaticTags
         else
           raise "Unknown preprocessor: #{type}"
         end
